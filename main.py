@@ -52,12 +52,12 @@ def create_short(topic: str = None, progress_callback=None) -> bool:
     audio_path, srt_path = generate_voiceover(content.get('script'), filename="voiceover.mp3")
 
     # ---------------------------------------------------------
-    # 3. Download B-Roll (Using Pexels to avoid YouTube Captchas)
+    # 3. Download B-Roll
     # ---------------------------------------------------------
     log("\n[3/5] Downloading Viral B-Roll with yt-dlp...")
-    from core.yt_scraper import download_viral_b_roll # Moved here
+    from core.yt_scraper import download_viral_b_roll
     keywords = content.get('b_roll_keywords', [])
-    broll_paths, credits = download_viral_b_roll(keywords, clips_per_keyword=2)
+    broll_paths, credits = download_viral_b_roll(keywords, clips_per_keyword=2, progress_callback=progress_callback)
 
     if not broll_paths:
         log("Failed to download B-roll. Exiting.")

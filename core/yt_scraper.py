@@ -3,7 +3,19 @@ import random
 from yt_dlp import YoutubeDL
 from config import TEMP_DIR, YOUTUBE_COOKIES
 
-def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
+class YTDLPLogger:
+    def __init__(self, cb=None):
+        self.cb = cb
+    def debug(self, msg):
+        pass
+    def warning(self, msg):
+        if self.cb: self.cb(f"[yt-dlp warn] {msg}")
+        else: print(msg)
+    def error(self, msg):
+        if self.cb: self.cb(f"[yt-dlp error] {msg}")
+        else: print(msg)
+
+def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2, progress_callback=None):
     """
     Downloads viral, highly-satisfying or intense clips from YouTube Shorts 
     instead of boring stock footage using yt-dlp.
@@ -14,6 +26,11 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
     downloaded_files = []
     credits = []
     
+    def log(msg):
+        print(msg)
+        if progress_callback:
+            progress_callback(msg)
+            
     # Write cookies to file if provided
     cookies_path = None
     if YOUTUBE_COOKIES:
@@ -21,8 +38,10 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
         with open(cookies_path, "w") as f:
             f.write(YOUTUBE_COOKIES)
             
+    logger = YTDLPLogger(progress_callback)
+            
     for i, keyword in enumerate(keywords):
-        print(f"Searching viral Shorts for: {keyword}...")
+        log(f"Searching viral Shorts for: {keyword}...")
         # Search up to 20 results to build a pool to pick from
         search_query = f"ytsearch20:{keyword} tiktok short"
         
@@ -35,6 +54,7 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
             'ignoreerrors': True,
             'no_warnings': True,
             'extract_flat': True, # Only extract metadata, don't download yet
+            'logger': logger,
         }
         if cookies_path:
             extract_opts['cookiefile'] = cookies_path
@@ -57,7 +77,7 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
                 print(f"Failed to extract info for {keyword}: {e}")
                 
         if not video_urls:
-            print(f"No videos found for {keyword}")
+            log(f"No videos found for {keyword}")
             continue
             
         # Step 2: Randomize the pool! This prevents repeating the exact same top clips.
@@ -66,7 +86,7 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
         
         # Step 3: Download ONLY the randomly selected URLs
         for j, url in enumerate(selected_urls):
-            print(f"Downloading randomized pick {j+1}/{clips_per_keyword} for '{keyword}'...")
+            log(f"Downloading randomized pick {j+1}/{clips_per_keyword} for '{keyword}'...")
             
             # Use original rigorous filter to ensure it's actually a short
             def filter_shorts(info, *, incomplete):
@@ -84,6 +104,7 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
                 'no_warnings': True,
                 'match_filter': filter_shorts,
                 'ffmpeg_location': imageio_ffmpeg.get_ffmpeg_exe(),
+                'logger': logger,
             }
             if cookies_path:
                 download_opts['cookiefile'] = cookies_path
@@ -92,7 +113,7 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
                 try:
                     ydl.download([url])
                 except Exception as e:
-                    print(f"Failed to download URL {url}: {e}")
+                    log(f"Failed to download URL {url}: {e}")
                 
         # Robustly discover downloaded files
         for f in os.listdir(TEMP_DIR):
