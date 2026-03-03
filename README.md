@@ -199,7 +199,7 @@ We recommend **Render.com** to host the dashboard because it supports the backgr
    - **Name**: `sibbyrespect-admin` (or whatever you like)
    - **Language**: `Python 3`
    - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn dashboard.app:app`
+   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
 6. Scroll down to **Environment Variables** and add:
    - `NEXT_PUBLIC_SUPABASE_URL` = (your Supabase URL)
    - `SUPABASE_SERVICE_ROLE_KEY` = (your Supabase key)
