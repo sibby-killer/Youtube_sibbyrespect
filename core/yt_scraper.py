@@ -55,6 +55,7 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2, progress_c
             'no_warnings': True,
             'extract_flat': True, # Only extract metadata, don't download yet
             'logger': logger,
+            'extractor_args': {'youtube': {'player_client': ['android', 'ios']}}
         }
         if cookies_path:
             extract_opts['cookiefile'] = cookies_path
@@ -105,6 +106,7 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2, progress_c
                 'match_filter': filter_shorts,
                 'ffmpeg_location': imageio_ffmpeg.get_ffmpeg_exe(),
                 'logger': logger,
+                'extractor_args': {'youtube': {'player_client': ['android', 'ios']}}
             }
             if cookies_path:
                 download_opts['cookiefile'] = cookies_path
