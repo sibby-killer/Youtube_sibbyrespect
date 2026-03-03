@@ -112,32 +112,22 @@ python app.py
 
 ---
 
-## ☁️ GitHub Actions — Automated 4x/Day Posting
+## ☁️ Automated 4x/Day Posting (via Render)
 
-### Required Repository Secrets
-
-Go to **GitHub → Settings → Secrets and variables → Actions → New repository secret**:
-
-| Secret Name | Where to Get It |
-|---|---|
-| `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) |
-| `PEXELS_API_KEY` | [pexels.com/api](https://www.pexels.com/api/) |
-| `SUPABASE_URL` | Supabase Project Settings → API |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Project Settings → API |
-| `REDDIT_CLIENT_ID` | [reddit.com/prefs/apps](https://www.reddit.com/prefs/apps) → script app |
-| `REDDIT_CLIENT_SECRET` | Same as above |
-| `YOUTUBE_TOKEN_JSON` | Contents of your local `token.json` file (paste the whole JSON) |
+The automation schedule has been moved completely off of GitHub Actions and natively inside the Flask Dashboard using `APScheduler`. This prevents YouTube from blocking the bot due to public GitHub IP addresses.
 
 ### Posting Schedule (US Eastern Time)
+The `dashboard/app.py` script automatically runs the video generation in the background at these times:
 
-| UTC Cron | US Eastern | Notes |
-|---|---|---|
-| `0 14 * * *` | 9:00 AM EST | + daily cleanup |
-| `0 17 * * *` | 12:00 PM EST | |
-| `0 22 * * *` | 5:00 PM EST | |
-| `0 2 * * *` | 9:00 PM EST | |
+| Time | Action |
+|---|---|
+| 9:00 AM EST | Generate Video |
+| 9:15 AM EST | Local File Cleanup |
+| 12:00 PM EST | Generate Video |
+| 5:00 PM EST | Generate Video |
+| 9:00 PM EST | Generate Video |
 
-You can also trigger manually from **GitHub → Actions → SibbyRespect Auto-Post → Run workflow**.
+*(You can also trigger it manually at any time by clicking "Generate" in the dashboard).*
 
 ---
 
@@ -206,6 +196,7 @@ We recommend **Render.com** to host the dashboard because it supports the backgr
    - `GROQ_API_KEY` = (your Groq key)
    - `PEXELS_API_KEY` = (your Pexels key)
    - `FLASK_SECRET_KEY` = (any random secure password)
+   - `YOUTUBE_TOKEN_JSON` = (paste the entire contents of your local token.json)
    - `PYTHON_VERSION` = `3.11.0`
 7. Click **Create Web Service**.
 

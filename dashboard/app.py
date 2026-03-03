@@ -10,9 +10,52 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
 from config import FLASK_SECRET_KEY, SUPABASE_URL, SUPABASE_KEY
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+import pytz
 
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Scheduler Setup (Runs natively on Render to replace GitHub Actions)
+# ─────────────────────────────────────────────────────────────────────────────
+def run_scheduled_generation():
+    print("[SCHEDULER] Triggering automatic video generation...")
+    try:
+        from main import create_short
+        create_short()
+    except Exception as e:
+        print(f"[SCHEDULER ERORR] Daily run failed: {e}")
+
+# Only start the scheduler if we are running in the main Render thread
+# (This prevents starting double schedulers in debug mode)
+if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+    scheduler = BackgroundScheduler(timezone=pytz.timezone('US/Eastern'))
+    
+    # 9:00 AM EST (Includes cleanup logic manually triggered from scheduler.py theoretically, but here we just run create_short)
+    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=9, minute=0))
+    # 12:00 PM EST
+    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=12, minute=0))
+    # 5:00 PM EST
+    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=17, minute=0))
+    # 9:00 PM EST
+    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=21, minute=0))
+    
+    # Cleanup runs automatically every day at 9:15 AM EST independent of generation
+    def run_scheduled_cleanup():
+        print("[SCHEDULER] Triggering daily video cleanup...")
+        try:
+            from core.cleanup import cleanup_old_videos
+            cleanup_old_videos()
+        except Exception as e:
+            print(f"[SCHEDULER ERORR] Cleanup failed: {e}")
+            
+    scheduler.add_job(func=run_scheduled_cleanup, trigger=CronTrigger(hour=9, minute=15))
+    
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 # ─────────────────────────────────────────────────────────────────────────────
 
