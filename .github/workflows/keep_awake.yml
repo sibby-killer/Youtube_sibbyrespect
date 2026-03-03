@@ -1,0 +1,14 @@
+name: Keep Dashboard Awake
+
+on:
+  schedule:
+    # Runs every 14 minutes to prevent Render free tier from spinning down (spins down after 15 min inactivity)
+    - cron: '*/14 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Dashboard
+        run: curl -s https://youtube-sibbyrespect.onrender.com > /dev/null
