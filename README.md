@@ -1,0 +1,196 @@
+# SibbyRespect — YouTube Automation Empire 🚀
+
+**Automated YouTube Shorts factory** powered by Groq AI, Edge-TTS, yt-dlp, and the YouTube Data API.
+Generates, uploads, and manages 4 viral Shorts per day targeting US/UK audiences — fully hands-free.
+
+---
+
+## 📁 Project Structure
+
+```
+AutoVidEmpire/
+├── main.py                  # Master pipeline (run one video end-to-end)
+├── scheduler.py             # Single-run entry point for GitHub Actions
+├── config.py                # All API keys loaded from .env
+├── requirements.txt
+├── .env                     # ← YOUR SECRETS (never commit this)
+├── client_secret_*.json     # ← Google OAuth client secret (never commit)
+├── token.json               # ← Auto-generated OAuth token (add to GitHub Secrets)
+│
+├── core/
+│   ├── ai_script.py         # Groq Llama-3 script + SEO description generator
+│   ├── tts.py               # Edge-TTS voiceover + word-level SRT captions
+│   ├── yt_scraper.py        # yt-dlp B-roll downloader (GTA/UK/US/China/Satisfying)
+│   ├── video_editor.py      # MoviePy + FFmpeg assembler with Hormozi-style captions
+│   ├── youtube_uploader.py  # YouTube Data API v3 OAuth uploader
+│   ├── supabase_db.py       # Supabase video logging and status tracking
+│   ├── topic_generator.py   # Reddit scraper + 100 fallback topics
+│   ├── auto_comment.py      # Posts a pinned CTA comment after upload
+│   └── cleanup.py           # Deletes local files for videos older than 3 days
+│
+├── dashboard/
+│   ├── app.py               # Flask admin dashboard
+│   └── templates/           # Dark-themed HTML pages
+│
+└── .github/
+    └── workflows/
+        └── schedule.yml     # GitHub Actions: 4 posts/day at US EST times
+```
+
+---
+
+## ⚡ Quick Start (Local)
+
+### 1. Clone & Setup
+
+```bash
+git clone https://github.com/sibby-killer/Youtube_sibbyrespect.git
+cd Youtube_sibbyrespect
+python -m venv venv
+venv\Scripts\activate        # Windows
+pip install -r requirements.txt
+```
+
+### 2. Create `.env`
+
+```env
+GROQ_API_KEY=your_groq_key
+PEXELS_API_KEY=your_pexels_key
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+REDDIT_CLIENT_ID=your_reddit_client_id
+REDDIT_CLIENT_SECRET=your_reddit_client_secret
+FLASK_SECRET_KEY=any-random-string
+```
+
+### 3. Setup Supabase Table
+
+Go to **Supabase Dashboard → SQL Editor** and run:
+
+```sql
+CREATE TABLE IF NOT EXISTS videos (
+  id BIGSERIAL PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  title TEXT,
+  topic TEXT,
+  script TEXT,
+  local_path TEXT,
+  description TEXT,
+  tags TEXT[],
+  status TEXT DEFAULT 'generated',
+  youtube_id TEXT,
+  youtube_url TEXT,
+  views BIGINT DEFAULT 0,
+  likes BIGINT DEFAULT 0,
+  comments BIGINT DEFAULT 0
+);
+```
+
+### 4. Add Google OAuth Credentials
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Enable **YouTube Data API v3**
+3. Create OAuth 2.0 Credentials → **Desktop App**
+4. Download JSON → place it in the project root as `client_secret_*.json`
+5. Run once locally: `python main.py` → browser opens → log in → `token.json` is saved
+
+### 5. Run One Video Locally
+
+```bash
+python main.py
+# or with a specific topic:
+python main.py --topic "Why the Dunning-Kruger effect is more dangerous than you think"
+```
+
+### 6. Run the Dashboard
+
+```bash
+cd dashboard
+python app.py
+# Open http://127.0.0.1:5000
+```
+
+---
+
+## ☁️ GitHub Actions — Automated 4x/Day Posting
+
+### Required Repository Secrets
+
+Go to **GitHub → Settings → Secrets and variables → Actions → New repository secret**:
+
+| Secret Name | Where to Get It |
+|---|---|
+| `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) |
+| `PEXELS_API_KEY` | [pexels.com/api](https://www.pexels.com/api/) |
+| `SUPABASE_URL` | Supabase Project Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Project Settings → API |
+| `REDDIT_CLIENT_ID` | [reddit.com/prefs/apps](https://www.reddit.com/prefs/apps) → script app |
+| `REDDIT_CLIENT_SECRET` | Same as above |
+| `YOUTUBE_TOKEN_JSON` | Contents of your local `token.json` file (paste the whole JSON) |
+
+### Posting Schedule (US Eastern Time)
+
+| UTC Cron | US Eastern | Notes |
+|---|---|---|
+| `0 14 * * *` | 9:00 AM EST | + daily cleanup |
+| `0 17 * * *` | 12:00 PM EST | |
+| `0 22 * * *` | 5:00 PM EST | |
+| `0 2 * * *` | 9:00 PM EST | |
+
+You can also trigger manually from **GitHub → Actions → SibbyRespect Auto-Post → Run workflow**.
+
+---
+
+## 🎨 Channel Branding
+
+Edit the top of `core/ai_script.py`:
+
+```python
+CHANNEL_NAME   = "SibbyRespect"
+CHANNEL_SLOGAN = "Shocking facts that change how you see the world."
+HANDLE         = "@sibbyrespect"
+Channel_URL    = "https://www.youtube.com/channel/UCOvhnm2NE7JAQoY8h06GyFQ"
+```
+
+---
+
+## 🔄 How It Works
+
+```
+Reddit / Topic List
+      ↓
+  Groq Llama-3      → Script + Title + SEO Description + B-roll keywords
+      ↓
+  Edge-TTS          → MP3 voiceover + SRT word-level captions
+      ↓
+  yt-dlp            → Download viral B-roll (GTA / UK / US / China / Satisfying)
+      ↓
+  MoviePy + FFmpeg  → Stitch video + burn centered Hormozi-style captions
+      ↓
+  YouTube API       → Upload as public Short
+      ↓
+  Comment Bot       → Post + pin CTA comment
+      ↓
+  Supabase          → Log title, script, status, YouTube ID
+      ↓
+  3-Day Cleanup     → Delete local MP4, free disk space
+```
+
+---
+
+## 📊 Admin Dashboard
+
+Run locally at `http://127.0.0.1:5000`:
+
+- **Overview** — stats cards + recent videos table
+- **Videos** — full CRUD (edit title/status, delete)
+- **Generate** — trigger a new video with live status
+- **Analytics** — Chart.js views/likes/comments from Supabase
+
+---
+
+## 🔒 Security Notes
+
+- `.env`, `client_secret*.json`, and `token.json` are in `.gitignore` — never committed
+- All production secrets live as GitHub Repository Secrets only
+- The Supabase service role key has full DB access — do not expose it publicly

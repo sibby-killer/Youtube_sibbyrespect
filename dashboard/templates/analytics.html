@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}— Analytics{% endblock %}
+{% block page_title %}Analytics{% endblock %}
+{% block content %}
+
+<div class="card" style="margin-bottom:24px">
+    <div class="section-title">📈 Video Performance (last 10 uploads)</div>
+    {% if chart_data.labels %}
+    <canvas id="viewsChart" height="80"></canvas>
+    {% else %}
+    <p style="color:var(--muted);font-size:13px;text-align:center;padding:32px">
+        No uploaded videos yet. Analytics will appear here after your first upload.
+    </p>
+    {% endif %}
+</div>
+
+{% if chart_data.labels %}
+<div class="grid-2">
+    <div class="card">
+        <div class="section-title">👍 Likes per Video</div>
+        <canvas id="likesChart" height="120"></canvas>
+    </div>
+    <div class="card">
+        <div class="section-title">💬 Comments per Video</div>
+        <canvas id="commentsChart" height="120"></canvas>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    const labels = {{ chart_data.labels | tojson }};
+    const views = {{ chart_data.views  | tojson }};
+    const likes = {{ chart_data.likes  | tojson }};
+    const comments = {{ chart_data.comments | tojson }};
+
+    const gridColor = 'rgba(255,255,255,0.05)';
+    const defaults = {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+        scales: {
+            x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: gridColor } },
+            y: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: gridColor } }
+        }
+    };
+
+    if (document.getElementById('viewsChart')) {
+        new Chart(document.getElementById('viewsChart'), {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Views', data: views,
+                    backgroundColor: 'rgba(108,99,255,0.6)',
+                    borderColor: '#6c63ff', borderWidth: 1, borderRadius: 4
+                }]
+            },
+            options: defaults
+        });
+
+        new Chart(document.getElementById('likesChart'), {
+            type: 'doughnut',
+            data: {
+                labels,
+                datasets: [{
+                    data: likes,
+                    backgroundColor: ['#6c63ff', '#ff4d8d', '#22c55e', '#f59e0b', '#38bdf8',
+                        '#a78bfa', '#fb923c', '#34d399', '#f472b6', '#60a5fa']
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        new Chart(document.getElementById('commentsChart'), {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Comments', data: comments,
+                    borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)',
+                    fill: true, tension: 0.4, pointRadius: 4
+                }]
+            },
+            options: defaults
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}— Overview{% endblock %}
+{% block page_title %}Overview{% endblock %}
+{% block content %}
+
+<div class="grid-4 mb" style="margin-bottom:24px">
+    <div class="card">
+        <div class="stat-label">Total Videos</div>
+        <div class="stat-num" style="color:var(--accent)">{{ stats.total }}</div>
+        <div class="stat-label">all time</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">Uploaded</div>
+        <div class="stat-num" style="color:var(--green)">{{ stats.uploaded }}</div>
+        <div class="stat-label">live on YouTube</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">Generated</div>
+        <div class="stat-num" style="color:var(--yellow)">{{ stats.generated }}</div>
+        <div class="stat-label">awaiting upload</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">Cleaned</div>
+        <div class="stat-num" style="color:var(--muted)">{{ stats.cleaned }}</div>
+        <div class="stat-label">disk space freed</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="section-title">Recent Videos</div>
+    {% if recent %}
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Views</th>
+                <th>Likes</th>
+                <th>Created</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in recent %}
+            <tr>
+                <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                    {{ v.title or '—' }}</td>
+                <td>
+                    {% if v.status == 'uploaded' %}<span class="pill pill-green">uploaded</span>
+                    {% elif v.status == 'generated' %}<span class="pill pill-yellow">generated</span>
+                    {% elif v.status == 'cleaned' %}<span class="pill pill-blue">cleaned</span>
+                    {% else %}<span class="pill pill-red">{{ v.status }}</span>{% endif %}
+                </td>
+                <td>{{ v.views or 0 }}</td>
+                <td>{{ v.likes or 0 }}</td>
+                <td style="color:var(--muted);font-size:12px">{{ (v.created_at or '')[:10] }}</td>
+                <td>
+                    {% if v.youtube_url %}
+                    <a href="{{ v.youtube_url }}" target="_blank" class="btn btn-primary btn-sm">Watch</a>
+                    {% else %}—{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:var(--muted);font-size:13px">No videos yet. Click <a href="{{ url_for('generate') }}"
+            style="color:var(--accent)">Generate</a> to create your first one!</p>
+    {% endif %}
+
+    <div class="mt" style="text-align:right">
+        <a href="{{ url_for('videos') }}" class="btn btn-primary btn-sm">View all videos →</a>
+    </div>
+</div>
+
+{% endblock %}

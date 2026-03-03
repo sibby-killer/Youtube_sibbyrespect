@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}— Videos{% endblock %}
+{% block page_title %}All Videos{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div class="section-title" style="margin:0">{{ videos|length }} videos total</div>
+        <a href="{{ url_for('generate') }}" class="btn btn-primary">✨ New Video</a>
+    </div>
+
+    {% if videos %}
+    <table>
+        <thead>
+            <tr>
+                <th style="width:40px">#</th>
+                <th>Title</th>
+                <th>Topic</th>
+                <th>Status</th>
+                <th>YouTube</th>
+                <th>Created</th>
+                <th style="width:140px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in videos %}
+            <tr>
+                <td style="color:var(--muted)">{{ v.id }}</td>
+                <td style="max-width:200px">
+                    <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px">
+                        {{ v.title or '—' }}</div>
+                </td>
+                <td style="max-width:160px;color:var(--muted);font-size:12px">
+                    <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                        {{ v.topic or '—' }}</div>
+                </td>
+                <td>
+                    {% if v.status == 'uploaded' %}<span class="pill pill-green">uploaded</span>
+                    {% elif v.status == 'generated' %}<span class="pill pill-yellow">generated</span>
+                    {% elif v.status == 'cleaned' %}<span class="pill pill-blue">cleaned</span>
+                    {% else %}<span class="pill pill-red">{{ v.status or '—' }}</span>{% endif %}
+                </td>
+                <td>
+                    {% if v.youtube_url %}
+                    <a href="{{ v.youtube_url }}" target="_blank" class="btn btn-primary btn-sm">▶ Watch</a>
+                    {% else %}<span style="color:var(--muted)">—</span>{% endif %}
+                </td>
+                <td style="color:var(--muted);font-size:12px">{{ (v.created_at or '')[:10] }}</td>
+                <td>
+                    <!-- Edit inline form -->
+                    <details style="display:inline">
+                        <summary class="btn btn-sm"
+                            style="cursor:pointer;background:var(--surface2);list-style:none;color:var(--text);border:1px solid var(--border)">
+                            ✏️</summary>
+                        <form method="POST" action="{{ url_for('update_video', vid_id=v.id) }}"
+                            style="position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;z-index:10;width:220px;margin-top:4px">
+                            <input name="title" placeholder="New title" value="{{ v.title or '' }}"
+                                style="margin-bottom:8px" />
+                            <select name="status" style="margin-bottom:8px">
+                                <option value="">— keep status —</option>
+                                <option value="generated">generated</option>
+                                <option value="uploaded">uploaded</option>
+                                <option value="cleaned">cleaned</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm" style="width:100%">Save</button>
+                        </form>
+                    </details>
+                    &nbsp;
+                    <form method="POST" action="{{ url_for('delete_video', vid_id=v.id) }}" style="display:inline"
+                        onsubmit="return confirm('Delete video {{ v.id }}?')">
+                        <button class="btn btn-danger btn-sm">🗑</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:var(--muted);font-size:13px;text-align:center;padding:32px">
+        No videos yet. <a href="{{ url_for('generate') }}" style="color:var(--accent)">Generate your first one!</a>
+    </p>
+    {% endif %}
+</div>
+
+{% endblock %}

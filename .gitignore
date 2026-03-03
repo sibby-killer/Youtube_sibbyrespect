@@ -1,0 +1,23 @@
+# === SECRETS — NEVER COMMIT THESE ===
+.env
+client_secret*.json
+token.json
+
+# === GENERATED OUTPUT — NOT FOR GIT ===
+output/
+temp/
+
+# === PYTHON ===
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.pyc
+
+# === OS FILES ===
+.DS_Store
+Thumbs.db
