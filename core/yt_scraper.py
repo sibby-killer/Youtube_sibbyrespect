@@ -1,4 +1,5 @@
 import os
+import random
 from yt_dlp import YoutubeDL
 from config import TEMP_DIR
 
@@ -15,13 +16,20 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
     
     for i, keyword in enumerate(keywords):
         print(f"Searching viral Shorts for: {keyword}...")
-        # Search up to 10 results, but we only download `clips_per_keyword`
-        search_query = f"ytsearch10:{keyword} tiktok short"
+        # Search up to 40 results so we have a deep pool to randomly pick from
+        search_query = f"ytsearch40:{keyword} tiktok short"
         
         def filter_shorts(info, *, incomplete):
             duration = info.get('duration')
             if duration and duration > 180:
                 return 'Video is too long (not a short)'
+            
+            # 70% chance to skip a valid video. 
+            # This forces yt-dlp to dig deep into the top 40 results 
+            # instead of always grabbing the exact same top 2 videos every day.
+            if random.random() < 0.70:
+                return 'Randomly skipping to ensure fresh unique b-roll'
+                
             return None
             
         import imageio_ffmpeg
