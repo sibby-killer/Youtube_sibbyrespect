@@ -9,6 +9,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # API Keys
 GROQ_API_KEY      = os.getenv("GROQ_API_KEY")
 PEXELS_API_KEY    = os.getenv("PEXELS_API_KEY")
+YOUTUBE_COOKIES   = os.getenv("YOUTUBE_COOKIES")
 
 # Supabase (Database & Dashboard)
 SUPABASE_URL      = os.getenv("NEXT_PUBLIC_SUPABASE_URL")

@@ -1,7 +1,7 @@
 import os
 import random
 from yt_dlp import YoutubeDL
-from config import TEMP_DIR
+from config import TEMP_DIR, YOUTUBE_COOKIES
 
 def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
     """
@@ -14,6 +14,13 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
     downloaded_files = []
     credits = []
     
+    # Write cookies to file if provided
+    cookies_path = None
+    if YOUTUBE_COOKIES:
+        cookies_path = os.path.join(TEMP_DIR, "youtube_cookies.txt")
+        with open(cookies_path, "w") as f:
+            f.write(YOUTUBE_COOKIES)
+            
     for i, keyword in enumerate(keywords):
         print(f"Searching viral Shorts for: {keyword}...")
         # Search up to 20 results to build a pool to pick from
@@ -29,6 +36,8 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
             'no_warnings': True,
             'extract_flat': True, # Only extract metadata, don't download yet
         }
+        if cookies_path:
+            extract_opts['cookiefile'] = cookies_path
         
         video_urls = []
         with YoutubeDL(extract_opts) as ydl:
@@ -76,6 +85,8 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2):
                 'match_filter': filter_shorts,
                 'ffmpeg_location': imageio_ffmpeg.get_ffmpeg_exe(),
             }
+            if cookies_path:
+                download_opts['cookiefile'] = cookies_path
             
             with YoutubeDL(download_opts) as ydl:
                 try:

@@ -197,6 +197,7 @@ We recommend **Render.com** to host the dashboard because it supports the backgr
    - `PEXELS_API_KEY` = (your Pexels key)
    - `FLASK_SECRET_KEY` = (any random secure password)
    - `YOUTUBE_TOKEN_JSON` = (paste the entire contents of your local token.json)
+   - `YOUTUBE_COOKIES` = **(REQUIRED FOR YT-DLP)** Install the "Get cookies.txt LOCALLY" Chrome extension, go to youtube.com, export your cookies, and paste the entire giant text block here.
    - `PYTHON_VERSION` = `3.11.0`
 7. Click **Create Web Service**.
 
