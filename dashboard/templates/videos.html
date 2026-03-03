@@ -6,7 +6,7 @@
 <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <div class="section-title" style="margin:0">{{ videos|length }} videos total</div>
-        <a href="{{ url_for('generate') }}" class="btn btn-primary">✨ New Video</a>
+        <a href="{{ url_for('automation') }}" class="btn btn-primary">✨ New Video</a>
     </div>
 
     {% if videos %}
@@ -77,7 +77,7 @@
     </table>
     {% else %}
     <p style="color:var(--muted);font-size:13px;text-align:center;padding:32px">
-        No videos yet. <a href="{{ url_for('generate') }}" style="color:var(--accent)">Generate your first one!</a>
+        No videos yet. <a href="{{ url_for('automation') }}" style="color:var(--accent)">Generate your first one!</a>
     </p>
     {% endif %}
 </div>
