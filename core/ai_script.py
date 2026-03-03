@@ -82,12 +82,7 @@ WATCH MORE mind-blowing content:
 [CREDITS_HERE]
 
 === B-ROLL KEYWORDS ===
-Provide EXACTLY 4 YouTube search terms for yt-dlp. ONLY use terms from these categories:
-- GTA 5 gameplay:      "GTA 5 insane stunt", "GTA 5 parkour challenge", "GTA 5 fails"
-- China video:         "China night market 4k", "China futuristic city", "Shanghai street walk"
-- UK lifestyle:        "London street walk 4k", "UK countryside drone", "London timelapse"
-- US lifestyle:        "New York City timelapse", "USA road trip 4k", "Las Vegas night 4k"
-- Satisfying/viral:    "satisfying kinetic sand", "satisfying machine pressing", "satisfying food cutting"
+Provide EXACTLY 4 keywords for Pexels API search. IMPORTANT: Keep them extremely simple and generic (1-2 words max). E.g., 'city timelapse', 'sand', 'waterfall', 'abstract', 'space', 'driving'. Do NOT use specific phrases like 'gta 5', 'satisfying kinetic sand', or long sentences.
 
 === OUTPUT ===
 Return ONLY valid JSON matching this schema — no markdown, no commentary:

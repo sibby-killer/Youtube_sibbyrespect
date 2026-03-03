@@ -46,11 +46,15 @@ def create_short(topic: str = None) -> bool:
     print("\n[2/5] Recording Voiceover with Edge-TTS...")
     audio_path, srt_path = generate_voiceover(content.get('script'), filename="voiceover.mp3")
 
-    # ── 3. Download Viral B-Roll ────────────────────────────────────────────
-    print("\n[3/5] Downloading Viral B-Roll with yt-dlp...")
+    # ---------------------------------------------------------
+    # 3. Download B-Roll (Using Pexels to avoid YouTube Captchas)
+    # ---------------------------------------------------------
+    print("\n[3/5] Downloading Viral B-Roll with Pexels...")
+    from core.pexels import download_pexels_b_roll
+    # We use fewer clips when doing Pexels to avoid hitting rate limits quickly
     keywords = content.get('b_roll_keywords', [])
-    broll_paths, credits = download_viral_b_roll(keywords, clips_per_keyword=2)
-
+    broll_paths, credits = download_pexels_b_roll(keywords, clips_per_keyword=1)
+    
     if not broll_paths:
         print("Failed to download B-roll. Exiting.")
         return False
