@@ -187,10 +187,35 @@ Run locally at `http://127.0.0.1:5000`:
 - **Generate** — trigger a new video with live status
 - **Analytics** — Chart.js views/likes/comments from Supabase
 
+### 🌐 Hosting the Dashboard Live (For Free)
+
+We recommend **Render.com** to host the dashboard because it supports the background threads needed for the `Generate` button. (Vercel kills background processes).
+
+1. Push your repo to GitHub.
+2. Go to [Render.com](https://render.com) and sign in with GitHub.
+3. Click **New +** → **Web Service**.
+4. Select your `Youtube_sibbyrespect` repository.
+5. Setup the service:
+   - **Name**: `sibbyrespect-admin` (or whatever you like)
+   - **Language**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn dashboard.app:app`
+6. Scroll down to **Environment Variables** and add:
+   - `NEXT_PUBLIC_SUPABASE_URL` = (your Supabase URL)
+   - `SUPABASE_SERVICE_ROLE_KEY` = (your Supabase key)
+   - `GROQ_API_KEY` = (your Groq key)
+   - `PEXELS_API_KEY` = (your Pexels key)
+   - `FLASK_SECRET_KEY` = (any random secure password)
+   - `PYTHON_VERSION` = `3.11.0`
+7. Click **Create Web Service**.
+
+Once it builds, you will have a live URL (e.g., `https://sibbyrespect-admin.onrender.com`) where you can access your dashboard from anywhere!
+
 ---
 
 ## 🔒 Security Notes
 
-- `.env`, `client_secret*.json`, and `token.json` are in `.gitignore` — never committed
-- All production secrets live as GitHub Repository Secrets only
-- The Supabase service role key has full DB access — do not expose it publicly
+- There are **ZERO** hardcoded API keys in the Python code. Everything loads from `.env` or system variables.
+- `.env`, `client_secret*.json`, and `token.json` are in `.gitignore` — they will never be pushed to GitHub.
+- All production secrets live securely in **GitHub Repository Secrets** or **Render Environment Variables**.
+- The Supabase service role key has full DB access — do not expose it publicly.

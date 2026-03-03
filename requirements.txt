@@ -11,4 +11,5 @@ supabase
 flask
 praw
 imageio-ffmpeg
+gunicorn
 google-api-python-client
