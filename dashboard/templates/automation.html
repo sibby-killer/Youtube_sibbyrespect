@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block page_title %}Automation Hub{% endblock %}
+{% block content %}
+
+<div class="grid-2" style="gap:24px;align-items:start">
+
+    <!-- Global Scheduler Control -->
+    <div class="card">
+        <div class="section-title">⏰ Daily Schedule</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:20px">
+            The background scheduler runs automatically 4 times a day (US/Eastern) resolving topics, rendering video,
+            and uploading natively to YouTube.
+        </p>
+
+        <div
+            style="display:flex; justify-content:space-between; align-items:center; background:var(--surface2); padding:16px; border-radius:8px; margin-bottom:16px">
+            <div>
+                <strong style="font-size:14px">Status:</strong>
+                <span id="scheduler-badge" class="pill pill-blue">Loading...</span>
+            </div>
+            <div style="display:flex; gap:8px">
+                <button id="btn-resume" class="btn btn-primary btn-sm" onclick="toggleScheduler('resume')"
+                    style="display:none">▶ Resume</button>
+                <button id="btn-pause" class="btn btn-danger btn-sm" onclick="toggleScheduler('pause')"
+                    style="display:none">⏸ Pause</button>
+            </div>
+        </div>
+
+        <strong style="font-size:13px; color:var(--muted)">Upcoming Runs:</strong>
+        <ul id="upcoming-jobs" style="font-size:13px; margin-top:8px; padding-left:20px; color:var(--text)">
+            <li>Loading schedule...</li>
+        </ul>
+    </div>
+
+    <!-- Live status -->
+    <div class="card" id="status-card">
+        <div class="section-title">🚀 Manual Trigger & Live Progress</div>
+
+        <form method="POST" style="margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid var(--border)">
+            <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px">
+                Optional Topic (Leave blank for auto-pick)
+            </label>
+            <div style="display:flex; gap:12px">
+                <input name="topic" placeholder="e.g. Why the sky is blue" style="flex:1" />
+                <button type="submit" class="btn btn-primary">
+                    Start Now
+                </button>
+            </div>
+        </form>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+            <strong style="font-size:14px">Current Activity:</strong>
+            <span id="status-msg" style="font-size:13px;color:var(--accent)">
+                {{ status.message }}
+            </span>
+        </div>
+
+        <div class="progress-bar mb" id="progress-container" style="{% if not status.running %}display:none{% endif %}">
+            <div class="progress-fill" style="width:100%"></div>
+        </div>
+
+        <strong style="font-size:13px; color:var(--muted)">Live Terminal Logs:</strong>
+        <div id="terminal-logs"
+            style="background:#000; color:#0f0; font-family:monospace; font-size:12px; padding:12px; border-radius:6px; height:200px; overflow-y:auto; margin-top:8px; white-space:pre-wrap;">
+            {% for log in status.logs %}{{ log }}
+            {% endfor %}</div>
+    </div>
+
+</div>
+
+<script>
+    // --- Scheduler Polling ---
+    function fetchScheduler() {
+        fetch('/api/scheduler/status')
+            .then(r => r.json())
+            .then(data => {
+                const badge = document.getElementById('scheduler-badge');
+                const btnPause = document.getElementById('btn-pause');
+                const btnResume = document.getElementById('btn-resume');
+
+                if (data.state === 'running') {
+                    badge.textContent = 'Active';
+                    badge.className = 'pill pill-green';
+                    btnPause.style.display = 'inline-block';
+                    btnResume.style.display = 'none';
+                } else {
+                    badge.textContent = 'Paused';
+                    badge.className = 'pill pill-yellow';
+                    btnPause.style.display = 'none';
+                    btnResume.style.display = 'inline-block';
+                }
+
+                const ul = document.getElementById('upcoming-jobs');
+                ul.innerHTML = '';
+                if (data.jobs && data.jobs.length > 0) {
+                    data.jobs.forEach(job => {
+                        const li = document.createElement('li');
+                        li.style.marginBottom = '6px';
+                        let timeStr = "Not scheduled";
+                        if (job.next_run_time) {
+                            const d = new Date(job.next_run_time);
+                            timeStr = d.toLocaleString();
+                        }
+                        li.innerHTML = `<strong>${job.name}</strong> — ${timeStr}`;
+                        ul.appendChild(li);
+                    });
+                } else {
+                    ul.innerHTML = '<li>No upcoming jobs.</li>';
+                }
+            })
+            .catch(console.error);
+    }
+
+    function toggleScheduler(action) {
+        fetch('/api/scheduler/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: action })
+        }).then(() => fetchScheduler());
+    }
+
+    // --- Live Logs Polling ---
+    function checkStatus() {
+        fetch('/api/generation-status')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('status-msg').textContent = data.message;
+                const pContainer = document.getElementById('progress-container');
+
+                if (data.running) {
+                    pContainer.style.display = 'block';
+                } else {
+                    pContainer.style.display = 'none';
+                }
+
+                const term = document.getElementById('terminal-logs');
+                term.textContent = data.logs.join('\n');
+
+                // Keep scrolled to bottom
+                term.scrollTop = term.scrollHeight;
+
+                if (data.running) setTimeout(checkStatus, 2000); // Poll fast for logs
+            });
+    }
+
+    // Initial load
+    fetchScheduler();
+    setInterval(fetchScheduler, 15000); // refresh schedule every 15s
+
+    // Start log polling immediately to keep state fresh
+    setInterval(checkStatus, 2500);
+</script>
+{% endblock %}

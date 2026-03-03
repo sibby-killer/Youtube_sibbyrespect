@@ -17,50 +17,54 @@ from core.yt_scraper import download_viral_b_roll
 from core.video_editor import stitch_video
 
 
-def create_short(topic: str = None) -> bool:
+def create_short(topic: str = None, progress_callback=None) -> bool:
     """
     Master function — generates a complete YouTube Short from a single topic.
     If topic is None, picks one automatically from Reddit or the fallback list.
     """
+    def log(msg):
+        print(msg)
+        if progress_callback:
+            progress_callback(msg)
+
     # Auto-pick topic if not supplied
     if not topic:
         from core.topic_generator import get_next_topic, get_used_topics_from_db
         used = get_used_topics_from_db()
         topic = get_next_topic(used_topics=used)
 
-    print(f"\n===========================================")
-    print(f"  AUTO-VIDEO: {topic[:60]}")
-    print(f"===========================================\n")
+    log(f"\n===========================================")
+    log(f"  AUTO-VIDEO: {topic[:60]}")
+    log(f"===========================================\n")
 
     # ── 1. Generate Script & Metadata ──────────────────────────────────────
-    print("[1/5] Brainstorming with Groq...")
+    log("[1/5] Brainstorming with Groq...")
     content = generate_video_content(topic)
     if not content:
-        print("Failed to generate content. Exiting.")
+        log("Failed to generate content. Exiting.")
         return False
 
-    print(f"  Title   : {content.get('title')}")
-    print(f"  Keywords: {content.get('b_roll_keywords')}")
+    log(f"  Title   : {content.get('title')}")
+    log(f"  Keywords: {content.get('b_roll_keywords')}")
 
     # ── 2. Generate Voiceover ───────────────────────────────────────────────
-    print("\n[2/5] Recording Voiceover with Edge-TTS...")
+    log("\n[2/5] Recording Voiceover with Edge-TTS...")
     audio_path, srt_path = generate_voiceover(content.get('script'), filename="voiceover.mp3")
 
     # ---------------------------------------------------------
     # 3. Download B-Roll (Using Pexels to avoid YouTube Captchas)
     # ---------------------------------------------------------
-    print("\n[3/5] Downloading Viral B-Roll with Pexels...")
-    from core.pexels import download_pexels_b_roll
-    # We use fewer clips when doing Pexels to avoid hitting rate limits quickly
+    log("\n[3/5] Downloading Viral B-Roll with yt-dlp...")
+    from core.yt_scraper import download_viral_b_roll # Moved here
     keywords = content.get('b_roll_keywords', [])
-    broll_paths, credits = download_pexels_b_roll(keywords, clips_per_keyword=1)
-    
+    broll_paths, credits = download_viral_b_roll(keywords, clips_per_keyword=2)
+
     if not broll_paths:
-        print("Failed to download B-roll. Exiting.")
+        log("Failed to download B-roll. Exiting.")
         return False
 
     # ── 4. Assemble Video ──────────────────────────────────────────────────
-    print("\n[4/5] Assembling Final MP4...")
+    log("\n[4/5] Assembling Final MP4...")
     safe_title = re.sub(r'[\\/*?:"<>|#]', "", content.get("title", "video")).strip().replace(" ", "_")
     output_filename = f"{safe_title[:40]}_final.mp4"
 
@@ -71,10 +75,10 @@ def create_short(topic: str = None) -> bool:
     )
 
     if not final_video_path:
-        print("\nFAILED to assemble video.")
+        log("\nFAILED to assemble video.")
         return False
 
-    print(f"\nSUCCESS! Video ready: {final_video_path}")
+    log(f"\nSUCCESS! Video ready: {final_video_path}")
 
     # Build full SEO description
     credits_text = "Background Video Credits:\n" + "\n".join([f"  {c}" for c in credits])
@@ -90,7 +94,7 @@ def create_short(topic: str = None) -> bool:
         f.write(f"Title: {content.get('title')}\n\nDescription:\n{final_desc}\n")
 
     # ── 5. Supabase Logging ────────────────────────────────────────────────
-    print("\n[5/5] Logging to Supabase & Uploading to YouTube...")
+    log("\n[5/5] Logging to Supabase & Uploading to YouTube...")
     from core.supabase_db import log_video, update_video_upload
     db_record = log_video(
         title=content.get('title', ''),
@@ -121,8 +125,9 @@ def create_short(topic: str = None) -> bool:
             # Post pinned comment
             from core.auto_comment import post_pinned_comment
             post_pinned_comment(youtube_service, yt_id)
+            log(f"Successfully uploaded to YouTube! ID: {yt_id}")
     else:
-        print("[Upload] YouTube auth not available — video saved locally only.")
+        log("[Upload] YouTube auth not available — video saved locally only.")
 
     return True
 

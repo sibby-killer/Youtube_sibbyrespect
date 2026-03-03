@@ -11,6 +11,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
 from config import FLASK_SECRET_KEY, SUPABASE_URL, SUPABASE_KEY
 import atexit
+import threading
+from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import pytz
@@ -137,26 +139,35 @@ def update_video(vid_id):
                 flash(f"Update error: {e}", "danger")
     return redirect(url_for("videos"))
 
-# ── Generate Video (async, non-blocking) ─────────────────────────────────────
+# ── Automation & Generation (async, non-blocking) ────────────────────────────
 
-_generation_status = {"running": False, "message": "Idle"}
+_generation_status = {"running": False, "message": "Idle", "logs": []}
+
+def _progress_callback(msg):
+    global _generation_status
+    _generation_status["message"] = msg
+    _generation_status["logs"].append(msg)
+    # Keep logs from growing infinitely
+    if len(_generation_status["logs"]) > 100:
+        _generation_status["logs"] = _generation_status["logs"][-100:]
 
 def _run_generation(topic=None):
     global _generation_status
-    _generation_status = {"running": True, "message": "Generating video..."}
+    _generation_status = {"running": True, "message": "Generating video...", "logs": ["Started manual format..."]}
     try:
         from main import create_short
-        ok = create_short(topic=topic or None)
-        _generation_status = {
-            "running": False,
-            "message": "Done! Video uploaded." if ok else "Generation failed."
-        }
+        ok = create_short(topic=topic or None, progress_callback=_progress_callback)
+        _generation_status["running"] = False
+        _generation_status["message"] = "Done! Video uploaded." if ok else "Generation failed."
+        _generation_status["logs"].append(_generation_status["message"])
     except Exception as e:
-        _generation_status = {"running": False, "message": f"Error: {e}"}
+        _generation_status["running"] = False
+        _generation_status["message"] = f"CRITICAL ERROR: {e}"
+        _generation_status["logs"].append(f"Error: {e}")
 
 
-@app.route("/generate", methods=["GET", "POST"])
-def generate():
+@app.route("/automation", methods=["GET", "POST"])
+def automation():
     global _generation_status
     if request.method == "POST":
         if _generation_status["running"]:
@@ -166,12 +177,43 @@ def generate():
             thread = threading.Thread(target=_run_generation, args=(topic,), daemon=True)
             thread.start()
             flash("Video generation started in the background!", "info")
-    return render_template("generate.html", status=_generation_status)
+    return render_template("automation.html", status=_generation_status)
 
 
 @app.route("/api/generation-status")
 def generation_status():
     return jsonify(_generation_status)
+
+
+@app.route("/api/scheduler/status")
+def scheduler_status():
+    try:
+        state = "running" if scheduler.state == 1 else "paused"
+        jobs = []
+        for job in scheduler.get_jobs():
+            jobs.append({
+                "id": job.id,
+                "name": job.name,
+                "next_run_time": job.next_run_time.isoformat() if job.next_run_time else None
+            })
+        return jsonify({"state": state, "jobs": jobs, "server_time": datetime.now(pytz.timezone('US/Eastern')).isoformat()})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/scheduler/toggle", methods=["POST"])
+def scheduler_toggle():
+    try:
+        action = request.json.get("action")
+        if action == "pause":
+            scheduler.pause()
+            return jsonify({"status": "paused"})
+        elif action == "resume":
+            scheduler.resume()
+            return jsonify({"status": "running"})
+        return jsonify({"error": "Invalid action"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ── Analytics ─────────────────────────────────────────────────────────────────
 
