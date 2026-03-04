@@ -82,7 +82,8 @@ def stitch_video(audio_path: str, broll_paths: list, output_filename: str = "fin
                 codec="libx264",
                 audio_codec="aac",
                 preset="ultrafast",
-                threads=4
+                threads=1,
+                logger=None
             )
             
             print("Burning dynamic SRT subtitles using FFmpeg...")
@@ -130,7 +131,8 @@ def stitch_video(audio_path: str, broll_paths: list, output_filename: str = "fin
                 codec="libx264",
                 audio_codec="aac",
                 preset="ultrafast",
-                threads=4
+                threads=1,
+                logger=None
             )
             print(f"Video assembly complete! Saved to {output_path}")
         
