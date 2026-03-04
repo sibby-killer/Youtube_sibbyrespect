@@ -33,31 +33,40 @@ def run_scheduled_generation():
 
 # Only start the scheduler if we are running in the main Render thread
 # (This prevents starting double schedulers in debug mode)
-if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
-    scheduler = BackgroundScheduler(timezone=pytz.timezone('US/Eastern'))
-    
-    # 9:00 AM EST (Includes cleanup logic manually triggered from scheduler.py theoretically, but here we just run create_short)
-    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=9, minute=0))
-    # 12:00 PM EST
-    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=12, minute=0))
-    # 5:00 PM EST
-    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=17, minute=0))
-    # 9:00 PM EST
-    scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=21, minute=0))
-    
-    # Cleanup runs automatically every day at 9:15 AM EST independent of generation
-    def run_scheduled_cleanup():
-        print("[SCHEDULER] Triggering daily video cleanup...")
-        try:
-            from core.cleanup import cleanup_old_videos
-            cleanup_old_videos()
-        except Exception as e:
-            print(f"[SCHEDULER ERORR] Cleanup failed: {e}")
-            
-    scheduler.add_job(func=run_scheduled_cleanup, trigger=CronTrigger(hour=9, minute=15))
-    
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
+scheduler = None
+_scheduler_started = False
+_scheduler_lock = threading.Lock()
+
+@app.before_request
+def initialize_scheduler():
+    global _scheduler_started, scheduler
+    if not _scheduler_started:
+        with _scheduler_lock:
+            if not _scheduler_started:
+                # Initialize scheduler safely after Gunicorn forks the worker process
+                scheduler = BackgroundScheduler(timezone=pytz.timezone('US/Eastern'))
+                
+                # 9:00 AM EST 
+                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=9, minute=0))
+                # 12:00 PM EST
+                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=12, minute=0))
+                # 5:00 PM EST
+                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=17, minute=0))
+                # 9:00 PM EST
+                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=21, minute=0))
+                
+                def run_scheduled_cleanup():
+                    print("[SCHEDULER] Triggering daily video cleanup...")
+                    try:
+                        from core.cleanup import cleanup_old_videos
+                        cleanup_old_videos()
+                    except Exception as e:
+                        print(f"[SCHEDULER ERORR] Cleanup failed: {e}")
+                        
+                scheduler.add_job(func=run_scheduled_cleanup, trigger=CronTrigger(hour=9, minute=15))
+                
+                scheduler.start()
+                _scheduler_started = True
 
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -82,7 +91,7 @@ def index():
                     stats[s] += 1
 
             recent = db.table("videos") \
-                .select("id, title, status, youtube_url, created_at, views, likes, comments") \
+                .select("*") \
                 .order("created_at", desc=True).limit(5).execute().data or []
         except Exception as e:
             flash(f"DB error: {e}", "danger")
@@ -188,14 +197,15 @@ def generation_status():
 @app.route("/api/scheduler/status")
 def scheduler_status():
     try:
-        state = "running" if scheduler.state == 1 else "paused"
+        state = "running" if scheduler and scheduler.state == 1 else "paused"
         jobs = []
-        for job in scheduler.get_jobs():
-            jobs.append({
-                "id": job.id,
-                "name": job.name,
-                "next_run_time": job.next_run_time.isoformat() if job.next_run_time else None
-            })
+        if scheduler:
+            for job in scheduler.get_jobs():
+                jobs.append({
+                    "id": job.id,
+                    "name": job.name,
+                    "next_run_time": job.next_run_time.isoformat() if job.next_run_time else None
+                })
         return jsonify({"state": state, "jobs": jobs, "server_time": datetime.now(pytz.timezone('US/Eastern')).isoformat()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -205,6 +215,9 @@ def scheduler_status():
 def scheduler_toggle():
     try:
         action = request.json.get("action")
+        if not scheduler:
+            return jsonify({"error": "Scheduler not initialized"}), 500
+            
         if action == "pause":
             scheduler.pause()
             return jsonify({"status": "paused"})
@@ -224,7 +237,7 @@ def analytics():
     if db:
         try:
             rows = db.table("videos") \
-                .select("title, views, likes, comments, created_at") \
+                .select("*") \
                 .eq("status", "uploaded") \
                 .order("created_at", desc=True).limit(10).execute().data or []
             for r in rows:
