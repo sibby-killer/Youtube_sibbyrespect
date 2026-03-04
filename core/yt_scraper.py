@@ -1,27 +1,12 @@
 import os
 import random
-from yt_dlp import YoutubeDL
-from config import TEMP_DIR, YOUTUBE_COOKIES
-
-class YTDLPLogger:
-    def __init__(self, cb=None):
-        self.cb = cb
-    def debug(self, msg):
-        pass
-    def warning(self, msg):
-        if self.cb: self.cb(f"[yt-dlp warn] {msg}")
-        else: print(msg)
-    def error(self, msg):
-        if self.cb: self.cb(f"[yt-dlp error] {msg}")
-        else: print(msg)
+import requests
+from config import TEMP_DIR
 
 def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2, progress_callback=None):
     """
-    Downloads viral, highly-satisfying or intense clips from YouTube Shorts 
-    instead of boring stock footage using yt-dlp.
-    Returns:
-       downloaded_files: A list of absolute paths to the downloaded videos.
-       credits: A list of channel names or titles for the description.
+    Downloads viral, highly-satisfying B-roll from TikTok using a free unwatermarked API.
+    Bypasses yt-dlp bot protection entirely.
     """
     downloaded_files = []
     credits = []
@@ -31,103 +16,59 @@ def download_viral_b_roll(keywords: list, clips_per_keyword: int = 2, progress_c
         if progress_callback:
             progress_callback(msg)
             
-    # Write cookies to file if provided
-    cookies_path = None
-    if YOUTUBE_COOKIES:
-        cookies_path = os.path.join(TEMP_DIR, "youtube_cookies.txt")
-        with open(cookies_path, "w") as f:
-            f.write(YOUTUBE_COOKIES)
-            
-    logger = YTDLPLogger(progress_callback)
-            
     for i, keyword in enumerate(keywords):
-        log(f"Searching viral Shorts for: {keyword}...")
-        # Search up to 20 results to build a pool to pick from
-        search_query = f"ytsearch20:{keyword} tiktok short"
+        log(f"Searching TikTok for: {keyword}...")
         
-        # Step 1: Extract info WITHOUT downloading to get the list of videos
-        import imageio_ffmpeg
-        
-        extract_opts = {
-            'quiet': True,
-            'nocheckcertificate': True,
-            'ignoreerrors': True,
-            'no_warnings': True,
-            'extract_flat': True, # Only extract metadata, don't download yet
-            'logger': logger,
-            'extractor_args': {'youtube': {'player_client': ['android', 'ios']}}
+        url = "https://tikwm.com/api/feed/search"
+        data = {
+            "keywords": f"{keyword} satisfying",
+            "count": 10,
+            "cursor": 0
         }
-        if cookies_path:
-            extract_opts['cookiefile'] = cookies_path
         
-        video_urls = []
-        with YoutubeDL(extract_opts) as ydl:
-            try:
-                info = ydl.extract_info(search_query, download=False)
-                if info and 'entries' in info:
-                    for entry in info['entries']:
-                        if entry and entry.get('url'):
-                            # Ensure it's a short (heuristic: duration < 180s if available)
-                            # extract_flat might not have duration, so we just grab URLs
-                            video_urls.append(entry.get('url'))
-                            
-                            uploader = entry.get('uploader', 'Unknown Creator')
-                            if uploader not in credits:
-                                credits.append(uploader)
-            except Exception as e:
-                print(f"Failed to extract info for {keyword}: {e}")
+        try:
+            res = requests.post(url, data=data, timeout=15)
+            res.raise_for_status()
+            json_data = res.json()
+            
+            videos = json_data.get('data', {}).get('videos', [])
+            if not videos:
+                log(f"[TikTok] No videos found for {keyword}")
+                continue
                 
-        if not video_urls:
-            log(f"No videos found for {keyword}")
-            continue
+            # Randomize to prevent repeating the same top videos
+            random.shuffle(videos)
+            selected_videos = videos[:clips_per_keyword]
             
-        # Step 2: Randomize the pool! This prevents repeating the exact same top clips.
-        random.shuffle(video_urls)
-        selected_urls = video_urls[:clips_per_keyword]
-        
-        # Step 3: Download ONLY the randomly selected URLs
-        for j, url in enumerate(selected_urls):
-            log(f"Downloading randomized pick {j+1}/{clips_per_keyword} for '{keyword}'...")
-            
-            # Use original rigorous filter to ensure it's actually a short
-            def filter_shorts(info, *, incomplete):
-                duration = info.get('duration')
-                if duration and duration > 180:
-                    return 'Video is too long (not a short)'
-                return None
-            
-            download_opts = {
-                'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-                'outtmpl': os.path.join(TEMP_DIR, f'broll_viral_{i}_{j}_%(id)s.%(ext)s'),
-                'quiet': False,
-                'nocheckcertificate': True,
-                'ignoreerrors': True,
-                'no_warnings': True,
-                'match_filter': filter_shorts,
-                'ffmpeg_location': imageio_ffmpeg.get_ffmpeg_exe(),
-                'logger': logger,
-                'extractor_args': {'youtube': {'player_client': ['android', 'ios']}}
-            }
-            if cookies_path:
-                download_opts['cookiefile'] = cookies_path
-            
-            with YoutubeDL(download_opts) as ydl:
-                try:
-                    ydl.download([url])
-                except Exception as e:
-                    log(f"Failed to download URL {url}: {e}")
+            for j, vid in enumerate(selected_videos):
+                play_url = vid.get('play')
+                author = vid.get('author', {}).get('nickname', 'Unknown TikTok Creator')
                 
-        # Robustly discover downloaded files
-        for f in os.listdir(TEMP_DIR):
-            if f.startswith(f"broll_viral_{i}_") and (f.endswith(".mp4") or f.endswith(".mkv") or f.endswith(".webm")):
-                full_path = os.path.join(TEMP_DIR, f)
-                if full_path not in downloaded_files:
-                    downloaded_files.append(full_path)
+                if not play_url:
+                    continue
                     
+                log(f"Downloading TikTok {j+1}/{clips_per_keyword} for '{keyword}'...")
+                
+                # Stream the MP4 to disk
+                mp4_res = requests.get(play_url, stream=True, timeout=20)
+                mp4_res.raise_for_status()
+                
+                out_path = os.path.join(TEMP_DIR, f'broll_tiktok_{i}_{j}.mp4')
+                with open(out_path, 'wb') as f:
+                    for chunk in mp4_res.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                
+                if os.path.exists(out_path):
+                    downloaded_files.append(out_path)
+                    if author not in credits:
+                        credits.append(f"@{author} (TikTok)")
+                        
+        except Exception as e:
+            log(f"[TikTok ERROR] Failed to fetch {keyword}: {e}")
+            
     return downloaded_files, credits
 
 if __name__ == "__main__":
-    # Test
-    files, creds = download_viral_b_roll(["satisfying kinetic sand", "extreme parkour trick"], clips_per_keyword=1)
+    files, creds = download_viral_b_roll(["GTA 5 parkour", "satisfying sand"], clips_per_keyword=1)
     print("Files:", files)
     print("Credits:", creds)
