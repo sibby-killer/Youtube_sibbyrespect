@@ -35,38 +35,44 @@ def run_scheduled_generation():
 # (This prevents starting double schedulers in debug mode)
 scheduler = None
 _scheduler_started = False
-_scheduler_lock = threading.Lock()
 
-@app.before_request
-def initialize_scheduler():
-    global _scheduler_started, scheduler
-    if not _scheduler_started:
-        with _scheduler_lock:
-            if not _scheduler_started:
-                # Initialize scheduler safely after Gunicorn forks the worker process
-                scheduler = BackgroundScheduler(timezone=pytz.timezone('US/Eastern'))
+def _boot_scheduler():
+    import time
+    time.sleep(3) # Wait for Gunicorn fork and request pipeline to warm up
+    global scheduler, _scheduler_started
+    if _scheduler_started:
+        return
+        
+    try:
+        scheduler = BackgroundScheduler(timezone=pytz.timezone('US/Eastern'))
+        
+        # 9:00 AM EST 
+        scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=9, minute=0))
+        # 12:00 PM EST
+        scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=12, minute=0))
+        # 5:00 PM EST
+        scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=17, minute=0))
+        # 9:00 PM EST
+        scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=21, minute=0))
+        
+        def run_scheduled_cleanup():
+            print("[SCHEDULER] Triggering daily video cleanup...")
+            try:
+                from core.cleanup import cleanup_old_videos
+                cleanup_old_videos()
+            except Exception as e:
+                print(f"[SCHEDULER ERROR] Cleanup failed: {e}")
                 
-                # 9:00 AM EST 
-                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=9, minute=0))
-                # 12:00 PM EST
-                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=12, minute=0))
-                # 5:00 PM EST
-                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=17, minute=0))
-                # 9:00 PM EST
-                scheduler.add_job(func=run_scheduled_generation, trigger=CronTrigger(hour=21, minute=0))
-                
-                def run_scheduled_cleanup():
-                    print("[SCHEDULER] Triggering daily video cleanup...")
-                    try:
-                        from core.cleanup import cleanup_old_videos
-                        cleanup_old_videos()
-                    except Exception as e:
-                        print(f"[SCHEDULER ERORR] Cleanup failed: {e}")
-                        
-                scheduler.add_job(func=run_scheduled_cleanup, trigger=CronTrigger(hour=9, minute=15))
-                
-                scheduler.start()
-                _scheduler_started = True
+        scheduler.add_job(func=run_scheduled_cleanup, trigger=CronTrigger(hour=9, minute=15))
+        
+        scheduler.start()
+        _scheduler_started = True
+        print("[SCHEDULER] Started securely in background thread.")
+    except Exception as e:
+        print(f"[SCHEDULER CRITICAL] Failed to boot up: {e}")
+
+# Boot the scheduler asynchronously so it doesn't block the first web request.
+threading.Thread(target=_boot_scheduler, daemon=True).start()
 
 # ─────────────────────────────────────────────────────────────────────────────
 

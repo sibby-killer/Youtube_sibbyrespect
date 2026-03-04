@@ -82,7 +82,12 @@ WATCH MORE mind-blowing content:
 [CREDITS_HERE]
 
 === B-ROLL KEYWORDS ===
-Provide EXACTLY 4 keywords for Pexels API search. IMPORTANT: Keep them extremely simple and generic (1-2 words max). E.g., 'city timelapse', 'sand', 'waterfall', 'abstract', 'space', 'driving'. Do NOT use specific phrases like 'gta 5', 'satisfying kinetic sand', or long sentences.
+Provide EXACTLY 4 TikTok search terms for the downloader. ONLY use terms from these viral categories:
+- GTA 5 gameplay:      "GTA 5 insane stunt", "GTA 5 parkour challenge", "GTA 5 satisfying"
+- China video:         "China night market", "China futuristic city", "Shanghai street walk"
+- UK lifestyle:        "London street walk", "UK countryside drone", "London cinematic"
+- US lifestyle:        "New York City driving", "USA road trip", "Las Vegas night"
+- Satisfying/viral:    "satisfying kinetic sand", "satisfying machine", "satisfying ASMR"
 
 === OUTPUT ===
 Return ONLY valid JSON matching this schema — no markdown, no commentary:
