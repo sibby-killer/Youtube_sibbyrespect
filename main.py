@@ -107,7 +107,7 @@ def create_short(topic: str = None, progress_callback=None) -> bool:
     )
 
     # ── 6. YouTube Upload ──────────────────────────────────────────────────
-    from core.youtube_uploader import get_authenticated_service, upload_video
+    from core.youtube_uploader import get_authenticated_service, upload_video, find_or_create_playlist, add_video_to_playlist
     youtube_service = get_authenticated_service()
     if youtube_service:
         video_tags = keywords + ["SibbyRespect", "Shorts", "Facts", "USA", "UK"]
@@ -122,6 +122,22 @@ def create_short(topic: str = None, progress_callback=None) -> bool:
         if yt_id:
             if db_record:
                 update_video_upload(db_record.get('id'), yt_id)
+            
+            # --- PLAYLIST INTEGRATION ---
+            from config import YOUTUBE_PLAYLIST_ID
+            plist_id = YOUTUBE_PLAYLIST_ID
+            if not plist_id:
+                # Automate playlist creation if not set
+                plist_title = f"{CHANNEL_NAME} - Shocking Facts & Viral Stories"
+                plist_desc  = (
+                    f"The ultimate collection of mind-blowing facts and viral stories from {CHANNEL_NAME}. "
+                    "New shorts uploaded 4 times every single day! #Facts #Shorts #Viral"
+                )
+                plist_id = find_or_create_playlist(youtube_service, plist_title, plist_desc)
+            
+            if plist_id:
+                add_video_to_playlist(youtube_service, yt_id, plist_id)
+            
             # Post pinned comment
             from core.auto_comment import post_pinned_comment
             post_pinned_comment(youtube_service, yt_id)

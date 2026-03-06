@@ -58,8 +58,8 @@ def _boot_scheduler():
         def run_scheduled_cleanup():
             print("[SCHEDULER] Triggering daily video cleanup...")
             try:
-                from core.cleanup import cleanup_old_videos
-                cleanup_old_videos()
+                from core.cleanup import run_cleanup
+                run_cleanup()
             except Exception as e:
                 print(f"[SCHEDULER ERROR] Cleanup failed: {e}")
                 

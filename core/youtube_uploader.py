@@ -162,6 +162,72 @@ def upload_video(youtube, file_path, title, description, tags, privacy_status="p
         print(f"Unexpected upload error: {e}")
         return None
 
+def find_or_create_playlist(youtube, title, description=""):
+    """
+    Checks if a playlist with the given title exists.
+    If not, creates it. Returns the playlist ID.
+    """
+    try:
+        # 1. Search existing playlists
+        request = youtube.playlists().list(
+            part="snippet",
+            mine=True,
+            maxResults=50
+        )
+        response = request.execute()
+        
+        for item in response.get("items", []):
+            if item["snippet"]["title"] == title:
+                print(f"[Playlist] Found existing playlist: {title} ({item['id']})")
+                return item["id"]
+        
+        # 2. Create if not found
+        print(f"[Playlist] Creating new playlist: {title}...")
+        create_res = youtube.playlists().insert(
+            part="snippet,status",
+            body={
+                "snippet": {
+                    "title": title,
+                    "description": description,
+                    "defaultLanguage": "en"
+                },
+                "status": {
+                    "privacyStatus": "public"
+                }
+            }
+        ).execute()
+        
+        plist_id = create_res.get("id")
+        print(f"[Playlist] Success! Created ID: {plist_id}")
+        return plist_id
+
+    except Exception as e:
+        print(f"[Playlist] Error managing playlist: {e}")
+        return None
+
+def add_video_to_playlist(youtube, video_id, playlist_id):
+    """Adds a video to a specific playlist."""
+    if not playlist_id:
+        return False
+        
+    try:
+        youtube.playlistItems().insert(
+            part="snippet",
+            body={
+                "snippet": {
+                    "playlistId": playlist_id,
+                    "resourceId": {
+                        "kind": "youtube#video",
+                        "videoId": video_id
+                    }
+                }
+            }
+        ).execute()
+        print(f"[Playlist] Video {video_id} added to playlist {playlist_id}.")
+        return True
+    except Exception as e:
+        print(f"[Playlist] Failed to add video to playlist: {e}")
+        return False
 
 if __name__ == "__main__":
     # Test block

@@ -112,102 +112,47 @@ python app.py
 
 ---
 
-## ☁️ Automated 4x/Day Posting (via Render)
+## ⚡ Dual Automation Model
 
-The automation schedule has been moved completely off of GitHub Actions and natively inside the Flask Dashboard using `APScheduler`. This prevents YouTube from blocking the bot due to public GitHub IP addresses.
+This project now supports **two independent ways** to automate your channel. You can use GitHub for hands-free 24/7 posting, or your Local PC for maximum control.
 
-### Posting Schedule (US Eastern Time)
-The `dashboard/app.py` script automatically runs the video generation in the background at these times:
+### Option A: GitHub Actions (Primary)
+GitHub can post 4 viral videos per day automatically for free.
+- **Workflow**: Automated via `.github/workflows/schedule.yml`.
+- **Times**: 9:00 AM, 12:00 PM, 5:00 PM, and 9:00 PM (EST).
+- **Setup**: Ensure you have added your `.env` keys to **GitHub Settings → Secrets and Variables → Actions**.
 
-| Time | Action |
-|---|---|
-| 9:00 AM EST | Generate Video |
-| 9:15 AM EST | Local File Cleanup |
-| 12:00 PM EST | Generate Video |
-| 5:00 PM EST | Generate Video |
-| 9:00 PM EST | Generate Video |
-
-*(You can also trigger it manually at any time by clicking "Generate" in the dashboard).*
+### Option B: Local Windows (Backup & Manual)
+Use your own computer if GitHub fails or if you want to post a video right now.
+1. **Manual Run**: Double-click `run_automation.bat`.
+2. **Scheduled Run**: Follow the [local_setup_guide.md](local_setup_guide.md) to use Windows Task Scheduler.
 
 ---
 
-## 🎨 Channel Branding
-
-Edit the top of `core/ai_script.py`:
-
-```python
-CHANNEL_NAME   = "SibbyRespect"
-CHANNEL_SLOGAN = "Shocking facts that change how you see the world."
-HANDLE         = "@sibbyrespect"
-Channel_URL    = "https://www.youtube.com/channel/UCOvhnm2NE7JAQoY8h06GyFQ"
+## 📊 Local Dashboard
+You can still use the beautiful Admin Dashboard to see view counts and analytics locally:
+```bash
+python dashboard/app.py
 ```
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 
 ---
 
-## 🔄 How It Works
-
-```
-Reddit / Topic List
-      ↓
-  Groq Llama-3      → Script + Title + SEO Description + B-roll keywords
-      ↓
-  Edge-TTS          → MP3 voiceover + SRT word-level captions
-      ↓
-  yt-dlp            → Download viral B-roll (GTA / UK / US / China / Satisfying)
-      ↓
-  MoviePy + FFmpeg  → Stitch video + burn centered Hormozi-style captions
-      ↓
-  YouTube API       → Upload as public Short
-      ↓
-  Comment Bot       → Post + pin CTA comment
-      ↓
-  Supabase          → Log title, script, status, YouTube ID
-      ↓
-  3-Day Cleanup     → Delete local MP4, free disk space
-```
+## 🔄 How It Works (TikTok B-Roll Edition)
+We have migrated away from YouTube B-roll to avoid bot detection and CAPTCHAs.
+1. **Groq AI**: Generates script and viral TikTok keywords.
+2. **Edge-TTS**: Creates the voiceover.
+3. **TikTok Scraper**: Direct HD download of unwatermarked clips via `tikwm` API.
+4. **FFmpeg/MoviePy**: Stitches clips with Hormozi-style subtitles.
+5. **YouTube API**: Uploads the final .mp4 as a public Short.
+6. **Supabase**: Logs the view counts and upload status.
 
 ---
 
-## 📊 Admin Dashboard
-
-Run locally at `http://127.0.0.1:5000`:
-
-- **Overview** — stats cards + recent videos table
-- **Videos** — full CRUD (edit title/status, delete)
-- **Generate** — trigger a new video with live status
-- **Analytics** — Chart.js views/likes/comments from Supabase
-
-### 🌐 Hosting the Dashboard Live (For Free)
-
-We recommend **Render.com** to host the dashboard because it supports the background threads needed for the `Generate` button. (Vercel kills background processes).
-
-1. Push your repo to GitHub.
-2. Go to [Render.com](https://render.com) and sign in with GitHub.
-3. Click **New +** → **Web Service**.
-4. Select your `Youtube_sibbyrespect` repository.
-5. Setup the service:
-   - **Name**: `sibbyrespect-admin` (or whatever you like)
-   - **Language**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
-6. Scroll down to **Environment Variables** and add:
-   - `NEXT_PUBLIC_SUPABASE_URL` = (your Supabase URL)
-   - `SUPABASE_SERVICE_ROLE_KEY` = (your Supabase key)
-   - `GROQ_API_KEY` = (your Groq key)
-   - `PEXELS_API_KEY` = (your Pexels key)
-   - `FLASK_SECRET_KEY` = (any random secure password)
-   - `YOUTUBE_TOKEN_JSON` = (paste the entire contents of your local token.json)
-   - `YOUTUBE_COOKIES` = **(REQUIRED FOR YT-DLP)** Install the "Get cookies.txt LOCALLY" Chrome extension, go to youtube.com, export your cookies, and paste the entire giant text block here.
-   - `PYTHON_VERSION` = `3.11.0`
-7. Click **Create Web Service**.
-
-Once it builds, you will have a live URL (e.g., `https://sibbyrespect-admin.onrender.com`) where you can access your dashboard from anywhere!
+## 🔒 Security & Keys
+- All keys live in `.env` (copy `.env.example` to start).
+- `client_secret_*.json` and `token.json` are required for YouTube uploads.
+- The `supabase_db.py` handles all the data tracking.
 
 ---
 
-## 🔒 Security Notes
-
-- There are **ZERO** hardcoded API keys in the Python code. Everything loads from `.env` or system variables.
-- `.env`, `client_secret*.json`, and `token.json` are in `.gitignore` — they will never be pushed to GitHub.
-- All production secrets live securely in **GitHub Repository Secrets** or **Render Environment Variables**.
-- The Supabase service role key has full DB access — do not expose it publicly.
