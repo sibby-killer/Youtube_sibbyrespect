@@ -29,18 +29,28 @@ def get_authenticated_service():
     env_token = os.getenv("YOUTUBE_TOKEN_JSON")
     if env_token:
         # Debugging (safely)
+        stripped_token = env_token.strip()
         print(f"YOUTUBE_TOKEN_JSON env var found (Length: {len(env_token)})")
-        if not env_token.strip():
-            print("WARNING: YOUTUBE_TOKEN_JSON is an empty string or just whitespace.")
+        
+        # Auto-fix: if the user pasted it with literal single/double quotes at start/end
+        if (stripped_token.startswith("'") and stripped_token.endswith("'")) or \
+           (stripped_token.startswith('"') and stripped_token.endswith('"')):
+            print("Detected literal quotes surrounding the token. Stripping them...")
+            stripped_token = stripped_token[1:-1].strip()
+
+        if not stripped_token:
+            print("WARNING: YOUTUBE_TOKEN_JSON is empty after stripping.")
         
         try:
             import json
-            token_info = json.loads(env_token)
+            token_info = json.loads(stripped_token)
             credentials = Credentials.from_authorized_user_info(token_info, SCOPES)
             print("Authenticated using YOUTUBE_TOKEN_JSON environment variable.")
         except Exception as e:
             print(f"Error parsing YOUTUBE_TOKEN_JSON env var: {e}")
-            print(f"Start of string: {env_token[:15]}... (Masked)")
+            # Show a tiny non-sensitive snippet to see what's actually in there (is it HTML? is it text?)
+            snippet = stripped_token[:30].replace("\n", "\\n")
+            print(f"RAW Snippet (first 30 chars): [{snippet}]")
     else:
         print("YOUTUBE_TOKEN_JSON is NOT set in environment variables.")
 
