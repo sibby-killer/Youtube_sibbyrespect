@@ -90,6 +90,18 @@ def get_authenticated_service():
     return googleapiclient.discovery.build("youtube", "v3", credentials=credentials)
 
 
+def sanitize_text(text):
+    """
+    Strips out characters strictly forbidden by the YouTube API in snippets.
+    Specifically angles brackets < and > which cause 400 invalidDescription.
+    """
+    if not text:
+        return ""
+    # Remove angle brackets
+    clean = text.replace("<", "").replace(">", "")
+    # Trim to allowed lengths
+    return clean
+
 def upload_video(youtube, file_path, title, description, tags, privacy_status="private"):
     """
     Uploads a video to YouTube.
@@ -98,11 +110,16 @@ def upload_video(youtube, file_path, title, description, tags, privacy_status="p
     """
     print(f"Preparing to upload: {title}")
     
+    # Sanitize inputs to prevent 400 Bad Request
+    safe_title = sanitize_text(title)[:100]
+    safe_description = sanitize_text(description)[:5000]
+    safe_tags = [sanitize_text(t)[:500] for t in (tags or [])]
+
     body = {
         "snippet": {
-            "title": title[:100], # YouTube title max length is 100
-            "description": description[:5000],
-            "tags": tags,
+            "title": safe_title,
+            "description": safe_description,
+            "tags": safe_tags,
             "categoryId": "22" # 22 = People & Blogs
         },
         "status": {
