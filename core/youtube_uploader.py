@@ -8,8 +8,11 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaFileUpload
 from config import BASE_DIR
 
-# Scope required for uploading videos
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+# Scope required for uploading and commenting
+SCOPES = [
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtube.force-ssl"
+]
 TOKEN_FILE = os.path.join(BASE_DIR, "token.json")
 
 def _find_client_secret():
