@@ -28,6 +28,11 @@ def get_authenticated_service():
     # 1. Check for YOUTUBE_TOKEN_JSON environment variable (Highest priority for Cloud/CI)
     env_token = os.getenv("YOUTUBE_TOKEN_JSON")
     if env_token:
+        # Debugging (safely)
+        print(f"YOUTUBE_TOKEN_JSON env var found (Length: {len(env_token)})")
+        if not env_token.strip():
+            print("WARNING: YOUTUBE_TOKEN_JSON is an empty string or just whitespace.")
+        
         try:
             import json
             token_info = json.loads(env_token)
@@ -35,6 +40,9 @@ def get_authenticated_service():
             print("Authenticated using YOUTUBE_TOKEN_JSON environment variable.")
         except Exception as e:
             print(f"Error parsing YOUTUBE_TOKEN_JSON env var: {e}")
+            print(f"Start of string: {env_token[:15]}... (Masked)")
+    else:
+        print("YOUTUBE_TOKEN_JSON is NOT set in environment variables.")
 
     # 2. Check for local token.json file (Fallback for local dev)
     if not credentials and os.path.exists(TOKEN_FILE):
@@ -54,8 +62,7 @@ def get_authenticated_service():
         # If still no valid credentials, we need the client_secret to start new flow
         if not credentials:
             if not client_secrets_file:
-                print("ERROR: No client_secret*.json file found in project root.")
-                print("Please download your OAuth 2.0 Desktop App credentials from Google Cloud Console.")
+                print("ERROR: Authentication failed. No valid token (env or file) and no client_secret*.json to start login flow.")
                 return None
                 
             print(f"Starting Google OAuth 2.0 flow using: {os.path.basename(client_secrets_file)}")
