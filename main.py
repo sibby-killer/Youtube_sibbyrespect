@@ -11,7 +11,7 @@ if not hasattr(PIL.Image, 'ANTIALIAS'):
     PIL.Image.ANTIALIAS = PIL.Image.Resampling.LANCZOS
 # --------------------------------------------------------------
 
-from core.ai_script import generate_video_content
+from core.ai_script import generate_video_content, CHANNEL_NAME
 from core.tts import generate_voiceover
 from core.yt_scraper import download_viral_b_roll
 from core.video_editor import stitch_video
