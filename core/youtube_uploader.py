@@ -20,21 +20,39 @@ def _find_client_secret():
 def get_authenticated_service():
     """
     Authenticates the user and returns the YouTube API service object.
-    Auto-detects any client_secret*.json file in the project root.
+    Supports both local token.json file and YOUTUBE_TOKEN_JSON environment variable (for GitHub Actions).
     """
     credentials = None
     client_secrets_file = _find_client_secret()
     
-    # Check if we have valid cached tokens
-    if os.path.exists(TOKEN_FILE):
+    # 1. Check for YOUTUBE_TOKEN_JSON environment variable (Highest priority for Cloud/CI)
+    env_token = os.getenv("YOUTUBE_TOKEN_JSON")
+    if env_token:
+        try:
+            import json
+            token_info = json.loads(env_token)
+            credentials = Credentials.from_authorized_user_info(token_info, SCOPES)
+            print("Authenticated using YOUTUBE_TOKEN_JSON environment variable.")
+        except Exception as e:
+            print(f"Error parsing YOUTUBE_TOKEN_JSON env var: {e}")
+
+    # 2. Check for local token.json file (Fallback for local dev)
+    if not credentials and os.path.exists(TOKEN_FILE):
         credentials = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+        print("Authenticated using local token.json file.")
         
     # If there are no (valid) credentials available, let the user log in.
     if not credentials or not credentials.valid:
         if credentials and credentials.expired and credentials.refresh_token:
             print("Refreshing YouTube access token...")
-            credentials.refresh(Request())
-        else:
+            try:
+                credentials.refresh(Request())
+            except Exception as e:
+                print(f"Token refresh failed: {e}. Might need new client_secret or manual login.")
+                credentials = None
+        
+        # If still no valid credentials, we need the client_secret to start new flow
+        if not credentials:
             if not client_secrets_file:
                 print("ERROR: No client_secret*.json file found in project root.")
                 print("Please download your OAuth 2.0 Desktop App credentials from Google Cloud Console.")
