@@ -18,6 +18,8 @@ from core.ai_content import (
 )
 from reddit_source import get_reddit_story
 from pixabay_audio import setup_sfx_library, get_background_music
+from sfx_cleaner import clean_sfx_library
+from story_series import process_reddit_story
 from sfx_manager import calculate_sfx_timestamps, overlay_sfx_on_audio
 from audio_mixer import speed_up_audio, mix_final_audio, extract_audio_from_video
 from core.tts import generate_voiceover
@@ -36,6 +38,7 @@ def ensure_tracking_files():
         "used_reddit_posts.json",
         "used_tiktok_videos.json",
         "used_music.json",
+        "pending_series.json",
     ]
     for f in tracking_files:
         if not os.path.exists(f):
@@ -62,12 +65,14 @@ def create_short(progress_callback=None) -> bool:
     ensure_tracking_files()
 
     # STEP 1: SFX Library
-    log("[STEP 1] Ensuring SFX library is ready...")
+    log("[STEP 1] Cleaning and manifesting SFX library...")
+    clean_sfx_library()
     setup_sfx_library()
 
     # STEP 2: Content Sourcing
-    log("[STEP 2] Sourcing content from Reddit...")
-    reddit_post = get_reddit_story()
+    log("[STEP 2] Sourcing content (checking pending series first)...")
+    raw_reddit_post = get_reddit_story()
+    reddit_post = process_reddit_story(raw_reddit_post) if raw_reddit_post else None
     
     # STEP 3: AI Content Generation
     log("[STEP 3] Generating chaotic AI content...")

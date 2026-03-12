@@ -4,6 +4,7 @@ import random
 import re
 from groq import Groq
 from config import GROQ_API_KEY
+from sfx_cleaner import get_available_sfx_names
 
 if GROQ_API_KEY:
     client = Groq(api_key=GROQ_API_KEY)
@@ -31,15 +32,14 @@ BASE_HASHTAGS = (
 PRIMARY_MODEL = "llama-3.3-70b-versatile"
 FALLBACK_MODEL = "llama-3.1-70b-versatile"
 
-# Available SFX names the AI can reference
-AVAILABLE_SFX = [
-    "door_creak", "heartbeat", "heartbeat_intense", "dramatic_bass_drop",
-    "angelic_choir", "roblox_oof", "gta_wasted", "sad_violin",
-    "thunder_crack", "glass_shatter", "police_siren", "cricket_silence",
-    "record_scratch", "emotional_piano", "windows_error", "alarm_blaring",
-    "anime_reveal", "dial_up_internet", "horror_sting", "scream_sfx",
-    "drum_roll", "whoosh", "boing", "fart_reverb", "metal_gear_alert",
-]
+# SFX list is now dynamically fetched
+def get_sfx_list_for_ai() -> str:
+    """Gets formatted SFX list for the AI system prompt."""
+    names = get_available_sfx_names()
+    if names:
+        return ", ".join(names)
+    # Fallback if manifest not ready
+    return "door_creak, heartbeat, dramatic_bass_drop, angelic_choir, record_scratch, sad_violin, thunder, glass_shatter, whoosh, cricket_silence"
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  BACKUP TOPICS (used when Reddit fails)
@@ -94,9 +94,11 @@ BACKUP_TOPICS = [
 # ─────────────────────────────────────────────────────────────────────────────
 #  MASTER SYSTEM PROMPT
 # ─────────────────────────────────────────────────────────────────────────────
-SFX_LIST_STR = ", ".join(AVAILABLE_SFX)
-
-MASTER_SYSTEM_PROMPT = f"""
+def get_system_prompt() -> str:
+    """Builds the system prompt with current SFX list."""
+    sfx_list = get_sfx_list_for_ai()
+    
+    prompt = f"""
 You are the chaotic unhinged brain behind the YouTube channel "{CHANNEL_NAME}" ({HANDLE}).
 You take relatable stories and situations and transform them into viral brain-rot style YouTube Shorts scripts.
 The scripts play over Roblox gameplay footage in the background.
@@ -199,6 +201,26 @@ LOOP ENDING EXAMPLES:
 Not every video needs a perfect loop but aim for it when natural.
 The ending should ALWAYS make the viewer want to either rewatch or see the next video.
 
+=== SERIES HANDLING ===
+Sometimes you will receive a story marked as Part X of Y. 
+When this happens:
+
+FOR PART 1:
+- Start the story normally with a strong hook
+- End with a cliffhanger: "...and that is only the beginning... part 2 is going to break you"
+- Title should include "pt.1" naturally: "nah this story gets WORSE pt.1 💀 #storytime #relatable"
+
+FOR PARTS 2, 3, etc:
+- Start with a quick recap: "so remember when I told you about [thing]... yeah it got worse..."
+- Continue the story from where the last part ended
+- End Part 2 with another cliffhanger if Part 3 exists
+- For the FINAL part, end with a satisfying conclusion + community CTA
+
+SERIES TITLES:
+- "nah it gets WORSE pt.1 💀 #storytime #brainrot"
+- "I TOLD you it gets worse pt.2 😭 #storytime #shorts"
+- "the ending broke me pt.3 (final) 🫠 #storytime #relatable"
+
 === SOUND EFFECTS (CRITICAL — READ CAREFULLY) ===
 The script text must be 100% CLEAN. No sound effect words in the spoken text.
 NO brackets, NO "(door creaks)", NO "(dramatic bass drop)" in the script.
@@ -208,25 +230,13 @@ Instead, you generate a SEPARATE sfx_timeline that maps trigger phrases to sound
 The code will find these phrases in the audio and overlay the sound effects at those moments.
 
 AVAILABLE SOUND EFFECTS YOU CAN USE:
-{SFX_LIST_STR}
+{sfx_list}
 
 Generate 3-5 sound effects per script.
 Each SFX entry needs:
 - trigger_phrase: A phrase FROM the script that the SFX should play DURING/AFTER
 - sound: The SFX name from the available list above
 - volume: Float 0.4 to 0.7 (0.5 = medium, 0.65 = noticeable)
-
-GOOD SFX PLACEMENT:
-- door_creak when someone enters/leaves a room
-- heartbeat or heartbeat_intense during tension/panic moments
-- dramatic_bass_drop at major revelations or dramatic moments
-- angelic_choir when something magical/good happens
-- record_scratch when the mood suddenly shifts
-- cricket_silence during awkward pauses
-- glass_shatter when dreams/expectations break
-- sad_violin during overdramatic sad moments
-- whoosh during fast transitions
-- roblox_oof during failure/pain moments
 
 === TONE AND LANGUAGE ===
 
@@ -267,7 +277,10 @@ BANNED:
 - Any reference to watching a video
 
 === STRICT RULES ===
-- Script: 170-210 words (NEVER exceed 220 words or go under 170 words)
+ABSOLUTE MINIMUM: 180 words. If your script is under 180 words you have FAILED.
+Aim for 190-200 words. Count your words before outputting.
+A 150 word script is a FAILURE. A 160 word script is a FAILURE.
+MINIMUM 180 words. This is the most important rule.
 - ZERO sound effect words in script text
 - 3-5 SFX in separate sfx_timeline
 - Use character names for realism
@@ -289,12 +302,6 @@ RULES:
 - End with 2-3 lowercase hashtags  
 - Under 80 characters before hashtags
 - Must feel like a tweet or text reaction
-
-GOOD: "nah this is a violation 💀 #relatable #brainrot"
-GOOD: "who authorized this level of accuracy 😭 #childhood #shorts"
-GOOD: "this unlocked a memory i buried DEEP 🫠 #nostalgia #genZ"
-BAD: "WHY DOES THIS HAPPEN" (boring)
-BAD: "Relatable School Memory" (generic)
 
 === DESCRIPTION GENERATION ===
 Chaotic Gen-Z style with proper newline formatting.
@@ -325,7 +332,6 @@ Generate a unique comment per video:
 
 === COMMENT-BAITING STRATEGY ===
 Comments are a HIGH-SIGNAL metric for the YouTube algorithm.
-More comments = more push from algorithm = more views.
 The pinned comment should challenge viewers to comment something SPECIFIC.
 
 HIGH-ENGAGEMENT COMMENT EXAMPLES:
@@ -339,6 +345,7 @@ HIGH-ENGAGEMENT COMMENT EXAMPLES:
 GOOD: "bro Marcus was in EVERY class and we all know exactly who our Marcus was... drop their name without dropping their name 💀"
 BAD: "Subscribe for more!" (promotional garbage)
 """
+    return prompt
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  CONTENT GENERATION — From Reddit or Backup Topic
@@ -354,11 +361,27 @@ def generate_video_content(reddit_post: dict = None, backup_topic: str = None) -
 
     # Build the content source for the AI
     if reddit_post:
-        source_text = f"REDDIT SOURCE (r/{reddit_post.get('subreddit', 'unknown')}, {reddit_post.get('score', 0)} upvotes):\n"
-        source_text += f"Title: {reddit_post.get('title', '')}\n"
-        if reddit_post.get('selftext'):
-            source_text += f"Body: {reddit_post['selftext'][:1000]}\n"
-        source_text += "\nTransform this Reddit story into your brain-rot rant style. Do NOT copy it. Rewrite completely in your voice with added character names, specific details, and dramatic flair."
+        if reddit_post.get("is_series"):
+            part_num = reddit_post.get("part_number", 1)
+            total = reddit_post.get("total_parts", 1)
+            series_title = reddit_post.get("series_title", "")
+            
+            source_text = f"SERIES: Part {part_num} of {total}\n"
+            source_text += f"Overall Story: {series_title}\n"
+            source_text += f"This Part's Content: {reddit_post.get('content', '')}\n\n"
+            
+            if part_num == 1:
+                source_text += "This is PART 1. Start the story with a strong hook. End with a cliffhanger for Part 2.\n"
+            elif part_num < total:
+                source_text += f"This is PART {part_num}. Start with a quick recap of what happened before. Continue the story. End with a cliffhanger for Part {part_num + 1}.\n"
+            else:
+                source_text += f"This is the FINAL PART ({part_num}). Start with a recap. Deliver the conclusion. End with a satisfying community CTA.\n"
+        else:
+            source_text = f"REDDIT SOURCE (r/{reddit_post.get('subreddit', 'unknown')}, {reddit_post.get('score', 0)} upvotes):\n"
+            source_text += f"Title: {reddit_post.get('title', '')}\n"
+            if reddit_post.get('selftext'):
+                source_text += f"Body: {reddit_post['selftext'][:1000]}\n"
+            source_text += "\nTransform this Reddit story into your brain-rot rant style. Do NOT copy it. Rewrite completely in your voice with added character names, specific details, and dramatic flair."
     elif backup_topic:
         source_text = f"TOPIC: {backup_topic}\nCreate a chaotic brain-rot rant about this relatable situation."
     else:
@@ -370,6 +393,9 @@ def generate_video_content(reddit_post: dict = None, backup_topic: str = None) -
         backup_topic = random.choice(available)
         save_used_topic(backup_topic)
         source_text = f"TOPIC: {backup_topic}\nCreate a chaotic brain-rot rant about this relatable situation."
+
+    system_prompt = get_system_prompt()
+    sfx_list_str = get_sfx_list_for_ai()
 
     user_prompt = f"""
 {source_text}
@@ -390,8 +416,15 @@ CRITICAL REMINDERS:
 - Community CTA woven naturally (never mention channel name)
 - 170-210 words exactly. If the script is under 160 words, it is TOO SHORT. Aim for 190 words.
 
+WORD COUNT IS CRITICAL:
+- MINIMUM: 180 words
+- TARGET: 190-200 words
+- MAXIMUM: 220 words
+- If your script is under 180 words, you MUST rewrite it longer
+- Count your words. This is the #1 priority.
+
 Available sound effects for sfx_timeline:
-{SFX_LIST_STR}
+{sfx_list_str}
 
 Return ONLY valid JSON:
 {{
@@ -411,7 +444,7 @@ Return ONLY valid JSON:
     try:
         response = client.chat.completions.create(
             messages=[
-                {"role": "system", "content": MASTER_SYSTEM_PROMPT},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
             model=PRIMARY_MODEL,
@@ -421,6 +454,37 @@ Return ONLY valid JSON:
             response_format={"type": "json_object"}
         )
         result = json.loads(response.choices[0].message.content)
+
+        # WORD COUNT RETRY LOGIC
+        script = result.get("script", "")
+        word_count = len(script.split())
+
+        if word_count < 170:
+            print(f"[AI] Script too short ({word_count} words). Requesting longer version...")
+            retry_prompt = f"Your script was only {word_count} words. I need MINIMUM 180 words, ideally 190-200. Please rewrite the SAME topic but make it LONGER with more details, more escalation, more internal thoughts. Do NOT just add filler — add genuine funny relatable details."
+            
+            try:
+                retry_response = client.chat.completions.create(
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                        {"role": "assistant", "content": response.choices[0].message.content},
+                        {"role": "user", "content": retry_prompt}
+                    ],
+                    model=PRIMARY_MODEL,
+                    temperature=0.92,
+                    max_tokens=3000,
+                    top_p=0.93,
+                    response_format={"type": "json_object"}
+                )
+                retry_result = json.loads(retry_response.choices[0].message.content)
+                retry_count = len(retry_result.get("script", "").split())
+                
+                if retry_count > word_count:
+                    result = retry_result
+                    print(f"[AI] Retry successful: {retry_count} words")
+            except:
+                print("[AI] Retry failed, using original")
         result["channel"] = CHANNEL_NAME
         result["bg_source"] = BG_SOURCE
 

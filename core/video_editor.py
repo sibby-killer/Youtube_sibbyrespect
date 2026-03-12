@@ -16,7 +16,7 @@ from config import OUTPUT_DIR, TEMP_DIR
 TARGET_WIDTH = 1080
 TARGET_HEIGHT = 1920
 TARGET_FPS = 30
-ZOOM_FACTOR = 1.15  # 115% zoom — fills screen + alters content
+ZOOM_FACTOR = 1.20  # 120% zoom — fills screen + alters content significantly
 
 def process_background_video(bg_video_path: str, target_duration: float):
     """
@@ -105,43 +105,51 @@ def apply_visual_enhancements(video_path: str) -> str:
 def burn_captions_styled(video_path: str, srt_path: str, output_path: str) -> bool:
     """
     Burns dynamic styled captions onto the vertical video.
+    Uses the new animated captions engine by default.
     """
+    from core.animated_captions import burn_animated_captions
+    return burn_animated_captions(video_path, srt_path, output_path)
+
+def add_watermark_ffmpeg(video_path: str, watermark_text: str = "SibbyRespect") -> str:
+    """
+    Adds watermark using FFmpeg as a more robust alternative to ImageMagick.
+    Uses drawtext filter at the bottom right.
+    """
+    output_path = video_path.replace(".mp4", "_watermarked.mp4")
     try:
-        style = (
-            "FontName=Impact,"
-            "FontSize=18,"
-            "PrimaryColour=&H00FFFFFF,"
-            "OutlineColour=&H00000000,"
-            "BackColour=&H40000000,"
-            "Bold=1,Outline=3,Shadow=2,"
-            "ShadowColour=&H80000000,Alignment=2,"
-            "MarginV=120,MarginL=60,MarginR=60"
+        # drawtext filter: white, 25% opacity (0.25), bottom right
+        # We use a standard path for Impact font on Windows
+        filter_str = (
+            f"drawtext=text='{watermark_text}':fontcolor=white@0.25:"
+            f"fontsize=36:x=w-tw-60:y=h-th-100:fontfile='C\\:/Windows/Fonts/impact.ttf'"
         )
-        # Handle Windows paths for FFmpeg
-        srt_escaped = srt_path.replace("\\", "/").replace(":", "\\:")
+        
+        # Fallback for fontfile if impact.ttf doesn't exist (simpler font)
+        if not os.path.exists("C:/Windows/Fonts/impact.ttf"):
+            filter_str = (
+                f"drawtext=text='{watermark_text}':fontcolor=white@0.25:"
+                f"fontsize=32:x=w-tw-40:y=h-th-80"
+            )
+
         cmd = [
             "ffmpeg", "-i", video_path,
-            "-vf", f"subtitles='{srt_escaped}':force_style='{style}'",
+            "-vf", filter_str,
             "-c:a", "copy", "-c:v", "libx264",
             "-preset", "medium", "-crf", "23", "-y",
             output_path
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+        
+        subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        
         if os.path.exists(output_path) and os.path.getsize(output_path) > 100000:
-            print(f"[Captions] Styled captions burned successfully")
-            return True
-        # Fallback
-        simple_cmd = [
-            "ffmpeg", "-i", video_path,
-            "-vf", f"subtitles='{srt_escaped}'",
-            "-c:a", "copy", "-c:v", "libx264", "-y", output_path
-        ]
-        subprocess.run(simple_cmd, capture_output=True, timeout=600)
-        return os.path.exists(output_path)
+            os.remove(video_path)
+            os.rename(output_path, video_path)
+            print(f"[Watermark] FFmpeg watermark applied")
+            return video_path
+        return video_path
     except Exception as e:
-        print(f"[Captions] Error: {e}")
-        shutil.copy2(video_path, output_path)
-        return True
+        print(f"[Watermark] FFmpeg error: {e}")
+        return video_path
 
 def ensure_shorts_duration(video_path: str, max_duration: float = 59.0) -> str:
     """
@@ -180,26 +188,16 @@ def assemble_simple_video(bg_video_path: str, final_audio_path: str, output_path
         
         final_video = bg.set_audio(audio)
         
-        # Add watermark
-        try:
-            watermark = TextClip(
-                "SibbyRespect",
-                fontsize=24,
-                color='white',
-                font='Arial-Bold',
-            ).set_opacity(0.25).set_duration(target_duration)
-            watermark = watermark.set_position((TARGET_WIDTH - 250, TARGET_HEIGHT - 80))
-            final_video = CompositeVideoClip([final_video, watermark])
-            print(f"[Assembly] Watermark added")
-        except Exception as e:
-            print(f"[Assembly] Watermark skipped: {e}")
-        
-        print(f"[Assembly] Rendering {TARGET_WIDTH}x{TARGET_HEIGHT} vertical...")
+        # Render the video first, then apply watermark using FFmpeg for robustness
+        print(f"[Assembly] Rendering primary vertical video...")
         final_video.write_videofile(
             output_path,
             codec="libx264", audio_codec="aac",
             preset="medium", threads=2, fps=TARGET_FPS, logger=None
         )
+        
+        # Always add watermark via FFmpeg after initial render
+        add_watermark_ffmpeg(output_path, "SibbyRespect")
         
         audio.close()
         bg.close()

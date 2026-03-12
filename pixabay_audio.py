@@ -8,8 +8,63 @@ import os
 import json
 import random
 import requests
-import time
-from config import PIXABAY_API_KEY
+import subprocess
+
+def download_music_with_ytdlp() -> str | None:
+    """
+    Downloads royalty-free background music using yt-dlp.
+    Sources from search terms if no valid music exists in bg_music/.
+    """
+    os.makedirs(MUSIC_DIR, exist_ok=True)
+    
+    # First check if we have existing valid music
+    if os.path.exists(MUSIC_DIR):
+        existing = [f for f in os.listdir(MUSIC_DIR) 
+                    if f.endswith(('.mp3', '.wav', '.m4a')) 
+                    and os.path.getsize(os.path.join(MUSIC_DIR, f)) > MUSIC_MIN_SIZE]
+        if existing:
+            chosen = random.choice(existing)
+            print(f"[Music] Using existing: {chosen}")
+            return os.path.join(MUSIC_DIR, chosen)
+    
+    # Download using yt-dlp
+    search_terms = [
+        "lo-fi chill beat royalty free",
+        "ambient background music free",
+        "chill instrumental beat free",
+    ]
+    
+    search = random.choice(search_terms)
+    output_path = os.path.join(MUSIC_DIR, f"bg_music_{random.randint(10000,99999)}.mp3")
+    
+    try:
+        print(f"[Music] Attempting download via yt-dlp: {search}")
+        cmd = [
+            "yt-dlp",
+            f"ytsearch1:{search}",
+            "-x", "--audio-format", "mp3",
+            "-o", output_path,
+            "--no-check-certificates",
+            "--quiet",
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        
+        if os.path.exists(output_path) and os.path.getsize(output_path) > MUSIC_MIN_SIZE:
+            print(f"[Music] Downloaded via yt-dlp: {output_path}")
+            return output_path
+    except Exception as e:
+        print(f"[Music] yt-dlp download failed: {e}")
+    
+    print("[Music] No music available — video will have voiceover + gameplay audio only")
+    return None
+
+def get_background_music() -> str | None:
+    """
+    Gets background music. 
+    1. Returns random existing music from bg_music/
+    2. If none, tries to download new one via yt-dlp
+    """
+    return download_music_with_ytdlp()
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  CONFIGURATION

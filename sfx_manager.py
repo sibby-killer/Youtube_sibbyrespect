@@ -106,7 +106,7 @@ def overlay_sfx_on_audio(voiceover_path: str, sfx_timestamps: list, output_path:
     Overlays sound effects onto voiceover at calculated timestamps.
     Matches audio formats to prevent 'list index out of range' errors.
     """
-    from pixabay_audio import get_sfx_path
+    from sfx_cleaner import get_sfx_path
     
     try:
         voiceover = AudioSegment.from_file(voiceover_path)

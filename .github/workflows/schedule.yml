@@ -31,10 +31,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install FFmpeg
+      - name: Install FFmpeg and ImageMagick
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg imagemagick
+          # Configure ImageMagick security policy for MoviePy
+          sudo sed -i 's/pixel\" value=\"1GiB\"/pixel\" value=\"4GiB\"/g' /etc/ImageMagick-6/policy.xml
+          sudo sed -i 's/disk\" value=\"1GiB\"/disk\" value=\"8GiB\"/g' /etc/ImageMagick-6/policy.xml
+          sudo sed -i 's/none\" rights=\"none\" pattern=\"PDF\"/read|write\" rights=\"none\" pattern=\"PDF\"/g' /etc/ImageMagick-6/policy.xml
 
       - name: Install Dependencies
         run: |
@@ -66,7 +70,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          for f in used_topics.json used_reddit_posts.json used_tiktok_videos.json used_music.json sfx_manifest.json; do
+          for f in used_topics.json used_reddit_posts.json used_tiktok_videos.json used_music.json sfx_manifest.json pending_series.json; do
             if [ -f "$f" ]; then
               git add "$f"
             fi
