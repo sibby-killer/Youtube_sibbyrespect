@@ -397,7 +397,7 @@ Return ONLY valid JSON:
 {{
     "title": "gen z title with emoji 💀 #hashtag1 #hashtag2",
     "description": "chaotic description with newlines...",
-    "script": "the complete 150-180 word clean script with ... pauses and NO sfx words...",
+    "script": "the complete 170-210 word clean script with ... pauses and NO sfx words...",
     "sfx_timeline": [
         {{"trigger_phrase": "phrase from script", "sound": "sfx_name", "volume": 0.6}},
         {{"trigger_phrase": "another phrase", "sound": "another_sfx", "volume": 0.55}}
