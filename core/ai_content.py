@@ -375,7 +375,7 @@ def generate_video_content(reddit_post: dict = None, backup_topic: str = None) -
 {source_text}
 
 GENERATE:
-1. A clean script (150-180 words, NO sound effect words, ready for TTS voiceover)
+1. A clean script (170-210 words, NO sound effect words, ready for TTS voiceover)
 2. A separate sfx_timeline (3-5 sound effects with trigger phrases from the script)
 3. A Gen-Z style title with emoji and hashtags
 4. A chaotic SEO description with proper newlines
@@ -405,7 +405,7 @@ Return ONLY valid JSON:
     "pinned_comment": "unique engaging comment for this video",
     "source": "reddit" or "backup_topic",
     "word_count": approximate_word_count_integer
-}
+}}
 """
 
     try:
