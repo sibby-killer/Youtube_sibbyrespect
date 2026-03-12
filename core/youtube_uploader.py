@@ -123,11 +123,12 @@ def upload_video(youtube, file_path, title, description, tags, privacy_status="p
             "title": safe_title,
             "description": safe_description,
             "tags": safe_tags,
-            "categoryId": "22" # 22 = People & Blogs
+            "categoryId": "24" # 24 = Entertainment
         },
         "status": {
             "privacyStatus": privacy_status,
-            "selfDeclaredMadeForKids": False
+            "selfDeclaredMadeForKids": False,
+            "containsSyntheticMedia": True  # AI disclosure — required 2026
         }
     }
 

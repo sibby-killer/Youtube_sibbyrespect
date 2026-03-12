@@ -66,6 +66,12 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add used_topics.json used_tiktok_videos.json used_reddit_posts.json used_music.json sfx_manifest.json || true
-          git diff --quiet && git diff --staged --quiet || git commit -m "[bot] Update tracking files (reddit + music + sfx + tiktok)"
-          git push
+          for f in used_topics.json used_reddit_posts.json used_tiktok_videos.json used_music.json sfx_manifest.json; do
+            if [ -f "$f" ]; then
+              git add "$f"
+            fi
+          done
+          if [ -d "sfx" ]; then git add sfx/ || true; fi
+          if [ -d "bg_music" ]; then git add bg_music/ || true; fi
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update tracking files"
+          git push || echo "Nothing to push"

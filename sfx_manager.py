@@ -103,65 +103,76 @@ def calculate_sfx_timestamps(script: str, sfx_timeline: list, audio_duration_ms:
 # ─────────────────────────────────────────────────────────────────────────────
 def overlay_sfx_on_audio(voiceover_path: str, sfx_timestamps: list, output_path: str) -> bool:
     """
-    Overlays sound effects onto the voiceover audio at calculated timestamps.
-    
-    Args:
-        voiceover_path: Path to the voiceover audio file
-        sfx_timestamps: List of dicts with timestamp_ms, sound, volume
-        output_path: Path for the output audio with SFX
-    
-    Returns:
-        True if successful
+    Overlays sound effects onto voiceover at calculated timestamps.
+    Matches audio formats to prevent 'list index out of range' errors.
     """
     from pixabay_audio import get_sfx_path
     
     try:
-        # Load voiceover
         voiceover = AudioSegment.from_file(voiceover_path)
         print(f"[SFX] Voiceover loaded: {len(voiceover)/1000:.1f}s")
+        print(f"[SFX] Voiceover format: {voiceover.channels}ch, {voiceover.frame_rate}Hz, {voiceover.sample_width}bytes")
         
-        # Overlay each SFX
         sfx_applied = 0
         for sfx_data in sfx_timestamps:
             sound_name = sfx_data["sound"]
             timestamp = sfx_data["timestamp_ms"]
             volume = sfx_data.get("volume", 0.6)
             
-            # Get SFX file path
             sfx_path = get_sfx_path(sound_name)
             if not sfx_path:
+                print(f"[SFX] File not found: {sound_name}")
                 continue
             
             try:
-                # Load SFX
                 sfx_audio = AudioSegment.from_file(sfx_path)
+                
+                # CRITICAL FIX: Match audio parameters to voiceover
+                sfx_audio = sfx_audio.set_frame_rate(voiceover.frame_rate)
+                sfx_audio = sfx_audio.set_channels(voiceover.channels)
+                sfx_audio = sfx_audio.set_sample_width(voiceover.sample_width)
                 
                 # Trim SFX if too long (max 2 seconds)
                 if len(sfx_audio) > 2000:
                     sfx_audio = sfx_audio[:2000]
                 
-                # Adjust volume
-                # volume 0.6 = reduce by ~4dB, 0.5 = ~6dB, etc
-                volume_reduction = -int((1 - volume) * 15)
-                sfx_audio = sfx_audio + volume_reduction
+                # Skip empty audio
+                if len(sfx_audio) == 0:
+                    print(f"[SFX] Empty audio: {sound_name}")
+                    continue
                 
-                # Make sure timestamp is within bounds
-                if timestamp < len(voiceover):
-                    voiceover = voiceover.overlay(sfx_audio, position=timestamp)
-                    sfx_applied += 1
-                    print(f"[SFX] Applied {sound_name} at {timestamp/1000:.1f}s")
+                # Adjust volume using dB
+                volume_db = -int((1 - volume) * 20)
+                sfx_audio = sfx_audio + volume_db
+                
+                # Ensure timestamp is within bounds
+                timestamp = max(0, min(int(timestamp), len(voiceover) - 100))
+                
+                # Apply overlay
+                voiceover = voiceover.overlay(sfx_audio, position=timestamp)
+                sfx_applied += 1
+                print(f"[SFX] Applied {sound_name} at {timestamp/1000:.1f}s")
                 
             except Exception as e:
                 print(f"[SFX] Error applying {sound_name}: {e}")
+                import traceback
+                traceback.print_exc()
                 continue
         
-        # Export
         voiceover.export(output_path, format="mp3", bitrate="192k")
         print(f"[SFX] Output saved: {output_path} ({sfx_applied} effects applied)")
         return True
         
     except Exception as e:
         print(f"[SFX] Overlay error: {e}")
+        import traceback
+        traceback.print_exc()
+        import shutil
+        try:
+            shutil.copy2(voiceover_path, output_path)
+            print(f"[SFX] Fallback: copied voiceover without SFX")
+        except:
+            pass
         return False
 
 

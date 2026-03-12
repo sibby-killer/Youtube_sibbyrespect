@@ -63,6 +63,31 @@ MUSIC_SEARCH_TERMS = [
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────
+#  VALIDATION
+# ─────────────────────────────────────────────────────────────────────────────
+def validate_audio_file(filepath: str, min_size_bytes: int = 5000, min_duration_ms: int = 100) -> bool:
+    """Validates that a downloaded audio file is valid and usable."""
+    try:
+        if not os.path.exists(filepath):
+            return False
+        
+        file_size = os.path.getsize(filepath)
+        if file_size < min_size_bytes:
+            print(f"[Validate] File too small ({file_size} bytes): {filepath}")
+            return False
+        
+        from pydub import AudioSegment
+        audio = AudioSegment.from_file(filepath)
+        if len(audio) < min_duration_ms:
+            print(f"[Validate] Audio too short ({len(audio)}ms): {filepath}")
+            return False
+        
+        return True
+    except Exception as e:
+        print(f"[Validate] Invalid audio: {filepath} — {e}")
+        return False
+
+# ─────────────────────────────────────────────────────────────────────────────
 #  PIXABAY API HELPERS
 # ─────────────────────────────────────────────────────────────────────────────
 def search_pixabay_audio(query: str, audio_type: str = "sound-effects", per_page: int = 5) -> list:
@@ -185,10 +210,13 @@ def setup_sfx_library():
                 
                 if audio_url:
                     if download_audio_file(audio_url, output_path):
-                        manifest[sfx_name] = output_path
-                        downloaded += 1
-                        success = True
-                        break
+                        if validate_audio_file(output_path):
+                            manifest[sfx_name] = output_path
+                            downloaded += 1
+                            success = True
+                            break
+                        else:
+                            os.remove(output_path)
 
             if not success:
                 print(f"[SFX] Failed to download: {sfx_name}")
@@ -249,6 +277,8 @@ def get_available_sfx() -> list:
 #  BACKGROUND MUSIC — Fetched per video from Pixabay
 # ─────────────────────────────────────────────────────────────────────────────
 USED_MUSIC_FILE = "used_music.json"
+MUSIC_MIN_SIZE = 100000  # 100KB minimum for music files
+MUSIC_MIN_DURATION = 5000  # 5 seconds minimum
 
 def load_used_music() -> list:
     if os.path.exists(USED_MUSIC_FILE):
@@ -264,10 +294,7 @@ def save_used_music(music_id: str):
 
 
 def get_background_music() -> str | None:
-    """
-    Downloads a background music track from Pixabay for the video.
-    Returns filepath of downloaded music, or None if failed.
-    """
+    """Downloads background music from Pixabay with proper validation."""
     os.makedirs(MUSIC_DIR, exist_ok=True)
     
     search_term = random.choice(MUSIC_SEARCH_TERMS)
@@ -282,26 +309,50 @@ def get_background_music() -> str | None:
             continue
         
         audio_url = None
-        for url_field in ["previewURL", "audio", "url"]:
-            if url_field in result:
+        for url_field in ["previewURL", "audio", "url", "musicURL", "preview", "webformatURL"]:
+            if url_field in result and result[url_field]:
                 audio_url = result[url_field]
                 break
         
-        if audio_url:
-            output_path = os.path.join(MUSIC_DIR, f"bg_music_{music_id}.mp3")
-            if download_audio_file(audio_url, output_path):
-                save_used_music(music_id)
-                return output_path
+        if not audio_url:
+            continue
+        
+        output_path = os.path.join(MUSIC_DIR, f"bg_music_{music_id}.mp3")
+        
+        if download_audio_file(audio_url, output_path):
+            file_size = os.path.getsize(output_path)
+            
+            if file_size < MUSIC_MIN_SIZE:
+                print(f"[Music] File too small ({file_size/1024:.0f}KB), skipping...")
+                os.remove(output_path)
+                continue
+            
+            try:
+                from pydub import AudioSegment
+                test = AudioSegment.from_file(output_path)
+                if len(test) < MUSIC_MIN_DURATION:
+                    print(f"[Music] Too short ({len(test)/1000:.1f}s), skipping...")
+                    os.remove(output_path)
+                    continue
+                print(f"[Music] Valid: {len(test)/1000:.1f}s, {file_size/1024:.0f}KB")
+            except Exception as e:
+                print(f"[Music] Invalid audio: {e}")
+                os.remove(output_path)
+                continue
+            
+            save_used_music(music_id)
+            return output_path
     
-    # Fallback: use any existing music file
+    # Fallback: use any existing valid music file
     if os.path.exists(MUSIC_DIR):
         existing = [f for f in os.listdir(MUSIC_DIR) if f.endswith('.mp3')]
-        if existing:
-            fallback = os.path.join(MUSIC_DIR, random.choice(existing))
-            print(f"[Music] Using existing music: {fallback}")
-            return fallback
+        for f in existing:
+            fp = os.path.join(MUSIC_DIR, f)
+            if os.path.getsize(fp) > MUSIC_MIN_SIZE:
+                print(f"[Music] Using existing: {fp}")
+                return fp
     
-    print("[Music] No background music available")
+    print("[Music] No valid background music available")
     return None
 
 

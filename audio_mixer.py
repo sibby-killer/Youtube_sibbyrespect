@@ -42,101 +42,89 @@ def speed_up_audio(audio_path: str, speed: float = 1.12, output_path: str = None
 # ─────────────────────────────────────────────────────────────────────────────
 #  4-LAYER AUDIO MIXING
 # ─────────────────────────────────────────────────────────────────────────────
-def mix_final_audio(
-    voiceover_path: str,
-    bg_music_path: str = None,
-    gameplay_audio_path: str = None,
-    output_path: str = "final_audio.mp3",
-    voiceover_volume: float = 1.0,
-    music_volume_db: float = -22,     # 6-8% perceived volume
-    gameplay_volume_db: float = -26,  # 5% perceived volume
-) -> str | None:
+def mix_final_audio(voiceover_path, bg_music_path=None, gameplay_audio_path=None,
+                    output_path="final_audio.mp3",
+                    music_volume_db=-22, gameplay_volume_db=-26):
     """
-    Mixes all audio layers into final audio.
+    Mixes all audio layers with proper format matching and error handling.
     
-    Layers:
-    1. Voiceover (with SFX already mixed in) — 100% volume
-    2. Background Music — 6-8% volume
-    3. Gameplay Audio — 5% volume
-    
-    Args:
-        voiceover_path: Path to voiceover (with SFX already overlaid)
-        bg_music_path: Path to background music
-        gameplay_audio_path: Path to gameplay audio extracted from video
-        output_path: Output path for final mixed audio
-        voiceover_volume: Voiceover volume multiplier
-        music_volume_db: Background music volume in dB reduction
-        gameplay_volume_db: Gameplay audio volume in dB reduction
-    
-    Returns:
-        Path to final mixed audio, or None if failed
+    Audio levels optimized for YouTube Shorts:
+    - Voiceover: 0dB (crystal clear, always dominant)
+    - SFX: already mixed into voiceover
+    - Music: -22dB (6-8% perceived — subtle atmosphere)
+    - Gameplay: -26dB (5% perceived — subtle immersion)
     """
     try:
-        # Load voiceover (already has SFX)
+        from pydub import AudioSegment
+        
         voiceover = AudioSegment.from_file(voiceover_path)
         target_duration = len(voiceover)
-        print(f"[Mixer] Voiceover duration: {target_duration/1000:.1f}s")
+        print(f"[Mixer] Voiceover: {target_duration/1000:.1f}s, {voiceover.channels}ch, {voiceover.frame_rate}Hz")
         
-        # Start with voiceover as base
         final_mix = voiceover
         
-        # Layer 2: Background Music
+        # Background Music
         if bg_music_path and os.path.exists(bg_music_path):
             try:
-                music = AudioSegment.from_file(bg_music_path)
-                
-                # Loop if shorter than voiceover
-                if len(music) < target_duration:
-                    loops = (target_duration // len(music)) + 1
-                    music = music * loops
-                
-                # Trim to match voiceover
-                music = music[:target_duration]
-                
-                # Reduce volume significantly
-                music = music + music_volume_db
-                
-                # Fade in/out for smoothness
-                music = music.fade_in(2000).fade_out(2000)
-                
-                # Overlay
-                final_mix = final_mix.overlay(music)
-                print(f"[Mixer] Background music added ({music_volume_db}dB)")
-                
+                music_size = os.path.getsize(bg_music_path)
+                if music_size < 100000:
+                    print(f"[Mixer] Music file too small ({music_size/1024:.0f}KB), skipping")
+                else:
+                    music = AudioSegment.from_file(bg_music_path)
+                    
+                    if len(music) < 3000:
+                        print(f"[Mixer] Music too short, skipping")
+                    else:
+                        # CRITICAL: Match format to voiceover
+                        music = music.set_frame_rate(voiceover.frame_rate)
+                        music = music.set_channels(voiceover.channels)
+                        music = music.set_sample_width(voiceover.sample_width)
+                        
+                        if len(music) < target_duration:
+                            loops = (target_duration // len(music)) + 1
+                            music = music * int(loops)
+                        music = music[:target_duration]
+                        music = music + music_volume_db
+                        music = music.fade_in(2000).fade_out(2000)
+                        
+                        final_mix = final_mix.overlay(music)
+                        print(f"[Mixer] Music added ({music_volume_db}dB)")
             except Exception as e:
-                print(f"[Mixer] Background music error (skipping): {e}")
+                print(f"[Mixer] Music error (skipping): {e}")
         
-        # Layer 3: Gameplay Audio
+        # Gameplay Audio
         if gameplay_audio_path and os.path.exists(gameplay_audio_path):
             try:
-                gameplay = AudioSegment.from_file(gameplay_audio_path)
-                
-                # Loop if needed
-                if len(gameplay) < target_duration:
-                    loops = (target_duration // len(gameplay)) + 1
-                    gameplay = gameplay * loops
-                
-                # Trim
-                gameplay = gameplay[:target_duration]
-                
-                # Very quiet
-                gameplay = gameplay + gameplay_volume_db
-                
-                # Overlay
-                final_mix = final_mix.overlay(gameplay)
-                print(f"[Mixer] Gameplay audio added ({gameplay_volume_db}dB)")
-                
+                gameplay_size = os.path.getsize(gameplay_audio_path)
+                if gameplay_size < 10000:
+                    print(f"[Mixer] Gameplay audio too small, skipping")
+                else:
+                    gameplay = AudioSegment.from_file(gameplay_audio_path)
+                    
+                    # Match format
+                    gameplay = gameplay.set_frame_rate(voiceover.frame_rate)
+                    gameplay = gameplay.set_channels(voiceover.channels)
+                    gameplay = gameplay.set_sample_width(voiceover.sample_width)
+                    
+                    if len(gameplay) < target_duration:
+                        loops = (target_duration // len(gameplay)) + 1
+                        gameplay = gameplay * int(loops)
+                    gameplay = gameplay[:target_duration]
+                    gameplay = gameplay + gameplay_volume_db
+                    
+                    final_mix = final_mix.overlay(gameplay)
+                    print(f"[Mixer] Gameplay audio added ({gameplay_volume_db}dB)")
             except Exception as e:
-                print(f"[Mixer] Gameplay audio error (skipping): {e}")
+                print(f"[Mixer] Gameplay error (skipping): {e}")
         
-        # Export final mix
         final_mix.export(output_path, format="mp3", bitrate="192k")
-        print(f"[Mixer] Final audio exported: {output_path} ({len(final_mix)/1000:.1f}s)")
-        
+        print(f"[Mixer] Final audio: {output_path} ({len(final_mix)/1000:.1f}s)")
         return output_path
         
     except Exception as e:
         print(f"[Mixer] Critical error: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 
