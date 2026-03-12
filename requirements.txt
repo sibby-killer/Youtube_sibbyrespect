@@ -1,6 +1,7 @@
 groq
 edge-tts
 moviepy==1.0.3
+pydub
 yt-dlp
 requests
 python-dotenv
@@ -16,4 +17,3 @@ apscheduler
 tzdata
 tzlocal
 pytz
-google-api-python-client
