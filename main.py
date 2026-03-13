@@ -70,8 +70,12 @@ def create_short(progress_callback=None) -> bool:
     setup_sfx_library()
 
     # STEP 2: Content Sourcing
-    log("[STEP 2] Sourcing content (checking pending series first)...")
+    log("[STEP 2] Sourcing content from Reddit (checking multiple subreddits)...")
     raw_reddit_post = get_reddit_story()
+    if not raw_reddit_post:
+        # ai_content.py will generate a random rant if reddit_post is None
+        log("[STEP 2] No Reddit post found. AI will generate a fallback topic.")
+    
     reddit_post = process_reddit_story(raw_reddit_post) if raw_reddit_post else None
     
     # STEP 3: AI Content Generation

@@ -133,6 +133,16 @@ def validate_audio_file(filepath: str, min_size_bytes: int = 5000, min_duration_
             print(f"[Validate] File too small ({file_size} bytes): {filepath}")
             return False
         
+        # CRITICAL: Check if the file is actually an HTML error page (common on bot blocks)
+        try:
+            with open(filepath, "rb") as f:
+                header = f.read(100).decode('utf-8', errors='ignore').lower()
+                if "<html" in header or "<!doctype" in header:
+                    print(f"[Validate] Detected HTML error page instead of audio: {filepath}")
+                    return False
+        except:
+            pass # Not a text-readable file, likely binary audio
+            
         from pydub import AudioSegment
         audio = AudioSegment.from_file(filepath)
         if len(audio) < min_duration_ms:
@@ -184,25 +194,55 @@ def search_pixabay_audio(query: str, audio_type: str = "sound-effects", per_page
 
 
 def download_audio_file(url: str, output_path: str) -> bool:
-    """Downloads an audio file from URL."""
+    """Downloads an audio file from URL with improved headers."""
     try:
-        response = requests.get(url, timeout=30, stream=True)
+        # Using same robust headers as Reddit to bypass blocks
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Referer": "https://pixabay.com/",
+        }
+        response = requests.get(url, headers=headers, timeout=30, stream=True)
         if response.status_code == 200:
             with open(output_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
             
-            file_size = os.path.getsize(output_path)
-            if file_size > 1000:  # At least 1KB
-                print(f"[Pixabay] Downloaded ({file_size/1024:.0f}KB): {output_path}")
+            if validate_audio_file(output_path):
+                print(f"[Pixabay] Downloaded successfully: {output_path}")
                 return True
             else:
-                os.remove(output_path)
+                if os.path.exists(output_path): os.remove(output_path)
                 return False
         return False
     except Exception as e:
         print(f"[Pixabay] Download error: {e}")
         return False
+
+def download_sfx_with_ytdlp(query: str, output_path: str) -> bool:
+    """Fallback: Downloads a short sound effect from YouTube using yt-dlp."""
+    try:
+        print(f"[SFX] Attempting yt-dlp fallback for: {query}")
+        # Search for short clips specifically
+        search = f"{query} sound effect short"
+        cmd = [
+            "yt-dlp",
+            f"ytsearch1:{search}",
+            "-x", "--audio-format", "mp3",
+            "--postprocessor-args", "ffmpeg:-ss 00:00:00 -t 00:00:05", # First 5 seconds
+            "-o", output_path,
+            "--no-check-certificates",
+            "--quiet",
+        ]
+        subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        
+        if validate_audio_file(output_path, min_size_bytes=3000):
+            print(f"[SFX] yt-dlp fallback success: {output_path}")
+            return True
+    except Exception as e:
+        print(f"[SFX] yt-dlp fallback failed: {e}")
+    
+    if os.path.exists(output_path): os.remove(output_path)
+    return False
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  SFX LIBRARY SETUP — First run downloads all SFX
@@ -256,10 +296,7 @@ def setup_sfx_library():
             # Try to download the first valid result
             success = False
             for result in results:
-                # Get audio URL — structure depends on Pixabay API response
                 audio_url = None
-                
-                # Try different possible URL fields
                 for url_field in ["previewURL", "audio", "url", "largeImageURL", "webformatURL"]:
                     if url_field in result:
                         audio_url = result[url_field]
@@ -267,20 +304,28 @@ def setup_sfx_library():
                 
                 if audio_url:
                     if download_audio_file(audio_url, output_path):
-                        if validate_audio_file(output_path):
-                            manifest[sfx_name] = output_path
-                            downloaded += 1
-                            success = True
-                            break
-                        else:
-                            os.remove(output_path)
+                        manifest[sfx_name] = output_path
+                        downloaded += 1
+                        success = True
+                        break
 
             if not success:
-                print(f"[SFX] Failed to download: {sfx_name}")
-                failed += 1
+                # TRY YT-DLP FALLBACK
+                if download_sfx_with_ytdlp(sfx_config["search"], output_path):
+                    manifest[sfx_name] = output_path
+                    downloaded += 1
+                    success = True
+                else:
+                    print(f"[SFX] Failed Pixabay AND yt-dlp: {sfx_name}")
+                    failed += 1
         else:
-            print(f"[SFX] No results for: {sfx_name}")
-            failed += 1
+            # TRY YT-DLP FALLBACK IMMEDIATELY
+            if download_sfx_with_ytdlp(sfx_config["search"], output_path):
+                manifest[sfx_name] = output_path
+                downloaded += 1
+            else:
+                print(f"[SFX] No Pixabay results and yt-dlp failed: {sfx_name}")
+                failed += 1
 
         # Rate limiting
         time.sleep(1)
