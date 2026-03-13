@@ -136,19 +136,24 @@ def validate_audio_file(filepath: str, min_size_bytes: int = 5000, min_duration_
         # CRITICAL: Check if the file is actually an HTML error page (common on bot blocks)
         try:
             with open(filepath, "rb") as f:
-                header = f.read(100).decode('utf-8', errors='ignore').lower()
-                if "<html" in header or "<!doctype" in header:
-                    print(f"[Validate] Detected HTML error page instead of audio: {filepath}")
+                header = f.read(200).decode('utf-8', errors='ignore').lower()
+                if "<html" in header or "<!doctype" in header or "pixabay" in header:
+                    print(f"[Validate] Detected HTML error/Pixabay page instead of audio: {filepath}")
                     return False
         except:
             pass # Not a text-readable file, likely binary audio
             
-        from pydub import AudioSegment
-        audio = AudioSegment.from_file(filepath)
-        if len(audio) < min_duration_ms:
-            print(f"[Validate] Audio too short ({len(audio)}ms): {filepath}")
+        try:
+            from pydub import AudioSegment
+            audio = AudioSegment.from_file(filepath)
+            if not audio or len(audio) < min_duration_ms:
+                print(f"[Validate] Audio too short/empty: {filepath}")
+                return False
+        except Exception as ae:
+            # This is where 'list index out of range' often hides in pydub/ffmpeg probe
+            print(f"[Validate] pydub couldn't decode {filepath}: {ae}")
             return False
-        
+            
         return True
     except Exception as e:
         print(f"[Validate] Invalid audio: {filepath} — {e}")

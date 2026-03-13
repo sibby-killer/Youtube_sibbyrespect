@@ -11,12 +11,16 @@ import random
 
 # Animation styles that rotate for variety
 ANIMATION_STYLES = {
-    "pop_in": r"{\fad(100,50)\fscx50\fscy50\t(0,100,\fscx100\fscy100)}",
-    "fade_up": r"{\fad(150,100)\move(540,1050,540,980)}",
-    "slide_left": r"{\fad(100,50)\move(1200,980,540,980)}",
-    "slide_right": r"{\fad(100,50)\move(-100,980,540,980)}",
-    "bounce": r"{\fad(100,50)\fscx120\fscy120\t(0,80,\fscx100\fscy100)\t(80,150,\fscx105\fscy105)\t(150,200,\fscx100\fscy100)}",
-    "zoom_shake": r"{\fad(80,50)\fscx80\fscy80\t(0,100,\fscx105\fscy105)\t(100,150,\fscx100\fscy100)}",
+    # Premium Pop: Scale from 50% -> 120% -> 100% with a slight rotation
+    "pop_in": r"{\fad(50,50)\fscx50\fscy50\t(0,100,\fscx120\fscy120\frz5)\t(100,200,\fscx100\fscy100\frz0)}",
+    # Typing style: Uses a fast horizontal wipe or simple scale
+    "typing": r"{\fad(0,0)\fscx0\t(0,150,\fscx100)}",
+    # Bounce: Dramatic vertical bounce
+    "bounce": r"{\fad(100,50)\fscx100\fscy100\t(0,100,\fscy130)\t(100,200,\fscy100)}",
+    # Jitter: Constant subtle vibration
+    "jitter": r"{\fad(100,50)\t(0,50,\frz2)\t(50,100,\frz-2)\t(100,150,\frz0)}",
+    # Zoom In: Smooth zoom forward
+    "zoom": r"{\fad(120,80)\fscx80\fscy80\t(0,300,\fscx110\fscy110)}",
 }
 
 # Color schemes that rotate (primary color for keywords)
@@ -50,6 +54,9 @@ def srt_to_ass(srt_path: str, ass_path: str) -> bool:
             return False
         
         # Build ASS header
+        # Alignment=5 is Middle-Center
+        # MarginV=0 for true vertical centering
+        # FontSize=75 for large, readable text
         ass_header = """[Script Info]
 Title: SibbyRespect Captions
 ScriptType: v4.00+
@@ -60,8 +67,8 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginV, MarginR, Encoding
-Style: Default,Impact,28,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,4,2,2,60,150,60,1
-Style: Highlight,Impact,32,&H0000FFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,4,2,2,60,150,60,1
+Style: Default,Impact,75,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,8,3,5,60,0,60,1
+Style: Highlight,Impact,85,&H0000FFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,10,4,5,60,0,60,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text

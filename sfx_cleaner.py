@@ -9,6 +9,7 @@ import json
 from pydub import AudioSegment
 
 SFX_DIR = "sfx"
+MANUAL_SFX_DIR = "SFX Sound Effects"
 SFX_MANIFEST_FILE = "sfx_manifest.json"
 MAX_SFX_DURATION_MS = 3000  # 3 seconds max
 MIN_SFX_DURATION_MS = 100   # 100ms minimum
@@ -17,30 +18,39 @@ MIN_SFX_SIZE_BYTES = 3000   # 3KB minimum
 
 def clean_sfx_library():
     """
-    Processes ALL files in sfx/ folder:
-    1. Removes files that are not audio
-    2. Removes files under 100ms or under 3KB
-    3. TRIMS files over 3 seconds to 3 seconds (keeps first 3 sec)
-    4. Normalizes all to mp3 format
-    5. Builds clean manifest mapping name → filepath
+    Processes ALL files in sfx/ AND MANUAL_SFX_DIR folder:
+    1. Checks manual folder first
+    2. Trims, normalizes, and moves to sfx/
+    3. Builds clean manifest mapping name → filepath
     """
     if not os.path.exists(SFX_DIR):
         os.makedirs(SFX_DIR, exist_ok=True)
-        print("[SFX Clean] Created sfx/ folder")
-        return {}
     
-    print(f"[SFX Clean] Scanning {SFX_DIR}/...")
+    # Ensure manual folder exists or create it so user can add to it
+    if not os.path.exists(MANUAL_SFX_DIR):
+        os.makedirs(MANUAL_SFX_DIR, exist_ok=True)
+        print(f"[SFX Clean] Created {MANUAL_SFX_DIR} folder for manual SFX")
+    
+    print(f"[SFX Clean] Scanning {SFX_DIR}/ and {MANUAL_SFX_DIR}/...")
     
     manifest = {}
     kept = 0
     trimmed = 0
     removed = 0
     
-    all_files = sorted(os.listdir(SFX_DIR))
-    print(f"[SFX Clean] Found {len(all_files)} files")
+    # Merge files from both directories
+    all_source_files = []
+    if os.path.exists(MANUAL_SFX_DIR):
+        for f in os.listdir(MANUAL_SFX_DIR):
+            all_source_files.append((MANUAL_SFX_DIR, f))
+    if os.path.exists(SFX_DIR):
+        for f in os.listdir(SFX_DIR):
+            all_source_files.append((SFX_DIR, f))
     
-    for filename in all_files:
-        filepath = os.path.join(SFX_DIR, filename)
+    print(f"[SFX Clean] Found {len(all_source_files)} potential source files")
+    
+    for dir_path, filename in all_source_files:
+        filepath = os.path.join(dir_path, filename)
         
         if not os.path.isfile(filepath):
             continue
