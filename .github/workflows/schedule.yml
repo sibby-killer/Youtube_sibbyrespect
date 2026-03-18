@@ -1,4 +1,4 @@
-name: SibbyRespect Automation Schedule
+name: CatTeaches Automation Schedule
 
 on:
   schedule:
@@ -48,7 +48,7 @@ jobs:
 
       - name: Create Directories
         run: |
-          mkdir -p temp output tiktok_bg_videos
+          mkdir -p temp output satisfying_bg_videos
 
       - name: Run Automation
         env:
@@ -70,7 +70,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          for f in used_topics.json used_reddit_posts.json used_tiktok_videos.json used_music.json sfx_manifest.json pending_series.json; do
+          for f in used_topics.json used_reddit_posts.json used_satisfying_videos.json used_music.json sfx_manifest.json pending_series.json; do
             if [ -f "$f" ]; then
               git add "$f"
             fi

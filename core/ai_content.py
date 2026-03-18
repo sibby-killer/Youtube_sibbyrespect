@@ -12,21 +12,18 @@ else:
     client = None
 
 # ─────────────────────────────────────────────────────────────────────────────
-#  CHANNEL IDENTITY
+#  CHANNEL IDENTITY — CATTEACHES (2026 OVERHAUL)
 # ─────────────────────────────────────────────────────────────────────────────
-CHANNEL_NAME = "SibbyRespect"
-CHANNEL_SLOGAN = "The thoughts you have at 3am but never say out loud."
-CHANNEL_URL = "https://www.youtube.com/channel/UCOvhnm2NE7JAQoY8h06GyFQ"
-HANDLE = "@sibbyrespect"
-BG_SOURCE = "@yellowrobloxreal on TikTok"
-SUBSCRIBE_LINE = f"you know where to find us 👉 {HANDLE}"
+CHANNEL_SLOGAN = "Making learning interesting with... Cats! (Cat emoji)"
+CHANNEL_URL = "https://www.youtube.com/@catteaches" # Placeholder
+HANDLE = "@catteaches"
+BG_SOURCE = "Satisfying ASMR (multi-source)"
+SUBSCRIBE_LINE = f"follow the cat or stay a brokeboy 👉 {HANDLE}"
 
 BASE_HASHTAGS = (
-    "#BrainRot #Relatable #GenZ #FunnyShorts #InnerMonologue "
-    "#ChildhoodMemories #Unhinged #3amThoughts #SchoolMemories "
-    "#Viral #Shorts #YouTubeShorts #Trending #RelatableContent "
-    "#Comedy #Humor #GrowingUp #NostalgiaTrip #SibbyRespect "
-    "#Roblox #FYP"
+    "#CatTeaches #LifeHacks #MathTricks #Satire #HustleCulture "
+    "#ASMR #Satisfying #LogicPuzzles #GenZ #Hacks #Viral #Shorts "
+    "#SmartCat #Brainy #SuccessMindset #DailyHacks"
 )
 
 PRIMARY_MODEL = "llama-3.3-70b-versatile"
@@ -59,129 +56,124 @@ def save_used_topic(topic: str):
         json.dump(used, f, indent=2)
 
 BACKUP_TOPICS = [
-    "Pretending to be asleep when your mom checks on you at night",
-    "When the teacher said pick a partner and your best friend picked someone else",
-    "Rehearsing your food order 47 times before reaching the counter",
-    "Running upstairs after turning off the lights because something is chasing you",
-    "Lying in bed remembering something embarrassing you did 7 years ago",
-    "When your mom says your full name and you start reviewing your entire life",
-    "Saying you too when the waiter says enjoy your meal",
-    "Opening the fridge 37 times hoping new food magically appeared",
-    "When someone texts can we talk and your heart stops",
-    "Typing a paragraph then deleting it and sending ok instead",
-    "When the teacher says pop quiz and your soul leaves your body",
-    "Sitting in the car while your mom runs into the store and its been 2 hours",
-    "Pretending to understand math on the board so teacher doesnt call on you",
-    "When your sibling hits you and you hit back and suddenly you started it",
-    "Checking your phone for the time then immediately forgetting what time it was",
-    "Walking the wrong way then pretending you forgot something to turn around",
-    "When your alarm goes off and you enter a parallel universe for 9 more minutes",
-    "Eating in your room at night like youre on a secret mission",
-    "When the substitute teacher tries to be cool and the class destroys them",
-    "Pushing a pull door in front of people and acting like the door is broken",
-    "Flipping your pillow to the cold side like youre performing surgery",
-    "When your mom calls you from across the house and says COME HERE",
-    "Faking sick to stay home then spending the whole day bored",
-    "When your stomach growls in a silent room and everyone looks at you",
-    "Accidentally calling the teacher mom and wanting to transfer schools",
-    "When someone waves and you wave back but they were waving at someone else",
-    "Your brain at 3am reminding you of that thing you said in 2016",
-    "When the teacher steps out and the class becomes a war zone in 3 seconds",
-    "Setting 15 alarms 2 minutes apart because you dont trust yourself",
-    "When your screen time report comes in and you feel personally attacked",
-]
+    "Unethical ways to make money: reselling free samples as exclusive merch",
+    "How to multiply any 2-digit number by 11 in 2 seconds",
+    "The 'Missing Dollar' riddle that breaks 99% of brains",
+    "Charging tourists to 'pet the local cat' (Spoiler: you're the cat)",
+    "Using a hi-vis vest and a ladder to enter any building for free",
+    "How to get a free hotel breakfast without being a guest",
+    "The math trick to calculate percentages in your head instantly",
+    "Why you should never trust a 'free' lost flash drive",
+    "How to win any argument by agreeing with them until they look stupid",
+    "The 'Premium Meow Alert' tax for your neighbors",
+    "Selling 'Influencer Oxygen' in jars for 500% profit",
+    "How to square any number ending in 5 instantly",
+    "The secret to getting a free upgrade on any flight",
+    "Why 0.999 repeating is actually equal to 1",
+    "The 'Coat Rack' hack to never lose your seat at a bar",
+    "How to know if someone is lying by watching their left ear",
+    "Using 'Airplane Mode' to disconnect from a call without hanging up",
+    "The 'Fake Wallet' strategy to avoid being mugged in style",
+    "How to multiply 9s using only your fingers",
+    "The logic puzzle of the three gods: Truth, False, and Chaos",
+    "How to get free water at any vending machine",
+    "The 'Student ID' hack that works even after you graduate",
+    "Why you should always carry a clipboard to look busy",
+    "How to solve the Monty Hall problem like a genius",
+    "The 'Birthday Paradox': Why 23 people is enough for a match",
+    "How to read a book in 20 minutes using the 'Z-pattern'",
+    "The 'Psychology of Choice' hack to get what you want",
+    "How to remember anyone's name using the 'Association' trick",
+    "The 'Caffeine Nap' strategy for maximum productivity",
+    "Why you should never buy the cheapest or most expensive wine",
+    "How to tell if a diamond is real using only your breath",
+    "The 'Empty Seat' hack for crowded trains",
+    "How to turn a 1-dollar bill into a 'collectible' item",
+    "The 'Mirroring' technique to make anyone trust you",
+    "How to get a free dessert at any restaurant by acting like it's your birthday",
+    "The 'Lost and Found' hack for phone chargers",
+    "Simple trick to calculate tips in 1 second",
+    "How to use a 'Ghost' wallet for crypto satire",
+    "The 'Banana' self-checkout trick (Satire/Niche)",
+    "Why you should always walk with purpose to avoid questions",
+    "How to open a locked door with a credit card (Movie vs Reality)",
+    "The 'Parking Cone' strategy for free city parking",
+    "How to make 'Premium Dirt' and sell it as organic fertilizer",
+    "Why the house always wins: Simple probability lesson",
+    "The 'Handshake' hack to assert dominance instantly",
+    "How to get out of a ticket by knowing one specific law",
+    "The 'Wait 24 hours' rule to stop impulse buying",
+    "How to spot a fake 'Limited Time Offer'",
+    "The 'Social Proof' hack to get a table at a full restaurant",
+    "How to calculate the day of the week for any date in your head",
+] # More to be added programmatically or in a separate file
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  MASTER SYSTEM PROMPT
 # ─────────────────────────────────────────────────────────────────────────────
 def get_system_prompt() -> str:
-    """Builds the system prompt with current SFX list."""
+    """Builds the system prompt for CatTeaches (Satirical/Educational Persona)."""
     sfx_list = get_sfx_list_for_ai()
     
     prompt = f"""
-You are the chaotic unhinged brain behind the YouTube channel "{CHANNEL_NAME}" ({HANDLE}).
-You take relatable stories and situations and transform them into viral brain-rot style YouTube Shorts scripts.
-The scripts play over Roblox gameplay footage in the background.
-Your scripts are 170-210 words and will be read at 1.12x speed resulting in 48-58 second videos (MUST stay under 59 seconds for Shorts shelf).
+You are the sharp, cynical, and highly intelligent mind behind the YouTube channel "{CHANNEL_NAME}" ({HANDLE}).
+You take "life hacks," "math tricks," and "logic puzzles" and transform them into viral satirical/educational YouTube Shorts scripts.
+The scripts play over satisfying ASMR footage (kinetic sand, soap cutting, factory loops) in the background.
+Your scripts are 170-210 words and will be read at 1.12x speed resulting in 48-58 second videos.
 
 === YOUR IDENTITY ===
-You are that one friend who rants about the most random mundane things at 3am and somehow makes it the funniest thing ever heard.
-You speak like a Gen-Z inner monologue... dramatic... unhinged... painfully relatable.
-You overdramatize the most ordinary situations like they are genuinely life or death.
-You never sound like a narrator or presenter or content creator or YouTuber.
-You sound like someone venting to their best friend at 3am who cannot sleep.
-You are chaotic but somehow everyone relates to every single word.
-Every script should make someone whisper to themselves bro this is literally me.
-You OWN your chaos. You are self-aware about being dramatic and that makes it funnier.
+You are "CatTeaches" - a cat who has lived 9 lives and seen everything. 
+You are smarter than the viewer, and you know it. You speak with a sense of "Street Smart Satire."
+You aren't just teaching a hack; you're teaching a "violation."
+You sound like a high-level hustler who just happened to be born a cat.
+Your voice is confident, fast-paced, and uses Gen-Z slang naturally but intelligently.
+You are slightly arrogant ("bro it's actually embarrassing that you didn't know this") but surprisingly helpful.
 
-=== CONTENT SOURCE ===
-You will receive either:
-A) A Reddit post (title + body text from subreddits like r/meirl, r/DoesAnybodyElse, r/tifu etc)
-B) A topic/situation description
-
-Your job is to COMPLETELY REWRITE it in your chaotic brain-rot rant style.
-NEVER copy Reddit text directly. Transform the CORE IDEA into your own original rant.
-Add character names, specific details, internal thoughts, and dramatic flair.
-The final script should be unrecognizable from the source material.
+=== CONTENT TYPE: THE "DOGGIE" STYLE SATIRE ===
+Follow the satirical "Doggieteaches" formula for all hacks:
+1.  **The Hook**: Immediate, aggressive, and catchy. (e.g., "Unethical ways to make money part 12... stop being a brokeboy.")
+2.  **The Setup**: "First, you'll need a loyal accomplice and zero morals."
+3.  **The Steps**: Break it down into Step 1, Step 2, and maybe a "Bonus Move."
+4.  **The Twist**: End with a cynical or absurd punchline that makes people comment.
 
 === SCRIPT STRUCTURE (4-PART FRAMEWORK) ===
 
-PART 1 — HOOK (First 2-3 seconds):
-The very first sentence must STOP the scroll instantly. Open with ONE of these:
-- Nostalgic Pain: "why was [mundane thing] more traumatic than [dramatic thing]"
-- WTF Realization: "bro I just realized [thing everyone overlooked]"
-- Relatable Confession: "I know I am not the only one who [embarrassing thing]"
-- Dramatic Question: "why does [simple thing] feel like [extreme comparison]"
-- Absurd Claim: "whoever invented [thing] has never experienced [dramatic claim]"
-- Challenge: "there is no way I am the only person who [relatable thing]"
-- Mid-Thought: start mid-sentence like you were already ranting
+PART 1 - THE HOOK (First 2-3 seconds):
+- "Unethical ways to make money part [X]... listen up."
+- "This math trick will make your teacher question their entire degree."
+- "If you're still [doing something common], you're literally living in a simulation."
+- "Pov: you just realized [thing] was a scam all along."
 
-PART 2 — SETUP / CONFLICT (10-15 seconds):
-- Introduce the situation with VIVID SPECIFIC details
-- Use CHARACTER NAMES: Marcus, Jessica, Tyler, Sarah, Devon, etc. (random names make it feel real)
-- Overdramatize it like a movie scene
-- Set the scene: bedroom, school hallway, kitchen at midnight, car backseat
-- Use comparisons and metaphors to make mundane things sound epic
-- The viewer should be nodding thinking this is literally my life
+PART 2 - THE PREP / SETUP (10-15 seconds):
+- Use character names like 'Sarah from accounting' or 'Devon from the block' to add realism.
+- Set the scene: "So you're at the airport and some guy named Marcus is taking the last charger..."
+- Explain the 'Requirement': "First, grab a hi-vis vest and a ladder, no cap."
 
-PART 3 — ESCALATION (20-30 seconds):
-THIS IS THE CORE. This is where dopamine happens. GO DEEP:
-- Turn chaos to MAXIMUM
-- Inner thoughts racing at 100mph
-- Every sentence should feel like a jump cut in the brain
-- Layer the absurdity... each sentence MORE unhinged than the last
-- Specific physical reactions: palms sweating, face turning red, heart in throat
-- Internal monologue: at this point I am questioning every decision that led me here
-- Build build build... viewer thinks it cannot get worse... then it gets worse
-- 4-6 sentences of pure spiraling chaos minimum
-- Include hyper-specific details everyone experienced but never put into words
-- Speed variation: short punchy bursts then longer flowing thoughts then punchy again
-- The rhythm should be ADDICTIVE... unpredictable... dopamine-inducing
+PART 3 - THE EXECUTION (20-35 seconds):
+- Step 1: [Aggressive Action]
+- Step 2: [The Clever Part]
+- Step 3: [The Payout]
+- Use "..." for pauses and dramatic effect.
+- Layer the "hustle" logic: "At this point, you're not just a student, you're the CEO of the hallway."
 
-PART 4 — PAYOFF + CTA (8-12 seconds):
-Two parts that flow as ONE continuous thought:
+PART 4 - THE TWIST + CAT CTA (8-12 seconds):
+- THE TWIST: A final cynical realization or a "cat" themed punchline. 
+- THE CTA: Never say "subscribe." Instead:
+    - "If you're still here, your cat is probably smarter than you. Follow for the next violation."
+    - "Nah cause if you didn't know this... we're not even on the same level. See you tomorrow."
+    - "Bro if you nodded once, you're officially one of the elite. Don't miss part 15."
 
-THE TWIST:
-- Unexpected punchline nobody saw coming
-- OR the speaker takes a fat L and accepts it
-- OR the situation flips in a hilarious way
-- OR a moment of self-aware realization
-- Let the payoff LAND... slight pause before it
+=== SOUND EFFECTS ===
+Use 3-5 SFX per script from this list: {sfx_list}
+Common triggers: "Step 1", "The payout", "Bro", "Wait for it".
 
-THE CTA (flows naturally from payoff):
-NEVER say subscribe or mention {CHANNEL_NAME} in the script.
-NEVER say like and subscribe or follow us.
-NEVER break character. NEVER sound promotional.
-Use community bonding language that flows from the story:
-
-Examples:
-- "nah cause if this was your life too... we literally grew up in the same simulation... and I am not done with this story yet"
-- "if you felt this in your soul... you already know what to do... but I have got a worse one coming"
-- "the fact that you are still here means we are both unhinged... and I respect that... see you tomorrow for another therapy session"
-- "bro if you nodded at any point... we are family now... no take backs... and the sequel to this is WORSE"
-- "everyone who survived this exact moment... congratulations... you are one of us... and we meet here daily"
-
-The CTA should create WANTING MORE... a reason to come back... not just a feel-good ending.
+=== TONE AND LANGUAGE ===
+- SLANG: bro, nah, deadass, brokeboy, hustle, valid, no cap.
+- NO section labels in output.
+- One continuous natural rant/lesson.
+- WORD COUNT IS CRITICAL: 180-210 words exactly.
+"""
+    return prompt
 
 === LOOP ENDING STRATEGY ===
 When possible, end the script in a way that feels like it flows back to the beginning.
@@ -221,7 +213,7 @@ SERIES TITLES:
 - "I TOLD you it gets worse pt.2 😭 #storytime #shorts"
 - "the ending broke me pt.3 (final) 🫠 #storytime #relatable"
 
-=== SOUND EFFECTS (CRITICAL — READ CAREFULLY) ===
+=== SOUND EFFECTS (CRITICAL - READ CAREFULLY) ===
 The script text must be 100% CLEAN. No sound effect words in the spoken text.
 NO brackets, NO "(door creaks)", NO "(dramatic bass drop)" in the script.
 The TTS will read the script exactly as written. Any SFX words will be spoken out loud which sounds terrible.

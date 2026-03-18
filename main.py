@@ -12,6 +12,10 @@ if not hasattr(PIL.Image, 'ANTIALIAS'):
     PIL.Image.ANTIALIAS = PIL.Image.Resampling.LANCZOS
 # --------------------------------------------------------------
 
+# ─────────────────────────────────────────────────────────────────────────────
+#  CATTEACHES AUTOMATION (2026)
+# ─────────────────────────────────────────────────────────────────────────────
+from core.ai_content import CHANNEL_NAME, HANDLE, BASE_HASHTAGS
 from core.ai_content import (
     generate_video_content, fix_description_formatting,
     CHANNEL_NAME
@@ -44,12 +48,12 @@ def ensure_tracking_files():
         if not os.path.exists(f):
             with open(f, "w") as fp:
                 json.dump([], fp)
-            print(f"[Init] Created {f}")
+            print(f"[CatTeaches] Created {f}")
 
 
 def create_short(progress_callback=None) -> bool:
     """
-    Master function — SibbyRespect Pipeline (2026 Algorithm Optimized).
+    Master function — CatTeaches Pipeline (2026 Algorithm Optimized).
     Follows 20-step high-quality production order.
     """
     def log(msg):

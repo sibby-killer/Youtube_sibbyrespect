@@ -37,30 +37,24 @@ HEADERS = {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-#  SUBREDDIT SOURCES — Organized by content type
+#  SUBREDDIT SOURCES — EDUCATIONAL & HACKS (CATTEACHES ERA)
 # ─────────────────────────────────────────────────────────────────────────────
 SUBREDDIT_SOURCES = {
-    "brain_rot": [
-        {"sub": "meirl", "sort": "top", "time": "week"},
-        {"sub": "me_irl", "sort": "top", "time": "week"},
-        {"sub": "relatable", "sort": "top", "time": "month"},
-        {"sub": "DoesAnybodyElse", "sort": "top", "time": "week"},
-        {"sub": "teenagers", "sort": "top", "time": "week"},
-        {"sub": "PointlessStories", "sort": "top", "time": "month"},
-        {"sub": "childhood", "sort": "top", "time": "month"},
-        {"sub": "nostalgia", "sort": "top", "time": "week"},
-        {"sub": "socialanxiety", "sort": "top", "time": "week"},
+    "hacks": [
+        {"sub": "lifehacks", "sort": "top", "time": "week"},
+        {"sub": "QuickTips", "sort": "top", "time": "week"},
+        {"sub": "learnuselesstalents", "sort": "top", "time": "month"},
+        {"sub": "todayilearned", "sort": "top", "time": "week"},
+        {"sub": "PsychologyInRealLife", "sort": "top", "time": "month"},
     ],
-    "commentary": [
-        {"sub": "Showerthoughts", "sort": "top", "time": "week"},
-        {"sub": "unpopularopinion", "sort": "top", "time": "week"},
-        {"sub": "CasualConversation", "sort": "top", "time": "week"},
-        {"sub": "mildlyinfuriating", "sort": "top", "time": "week"},
+    "math_logic": [
+        {"sub": "math", "sort": "top", "time": "month"},
+        {"sub": "puzzles", "sort": "top", "time": "week"},
+        {"sub": "riddles", "sort": "top", "time": "week"},
+        {"sub": "LogicPuzzles", "sort": "top", "time": "month"},
     ],
-    "stories": [
-        {"sub": "tifu", "sort": "top", "time": "week"},
-        {"sub": "TrueOffMyChest", "sort": "top", "time": "week"},
-        {"sub": "AskReddit", "sort": "top", "time": "week"},
+    "unethical": [
+        {"sub": "UnethicalLifeProTips", "sort": "top", "time": "week"},
     ],
 }
 
