@@ -369,7 +369,7 @@ def fix_description_formatting(description: str) -> str:
 
 if __name__ == "__main__":
     print(f"{'='*50}")
-    print(f"  {CHANNEL_NAME} — Brain-Rot Engine")
+    print(f"  {CHANNEL_NAME} — Educational Engine")
     print(f"{'='*50}")
     result = generate_video_content(backup_topic="When the teacher steps out and the class becomes a war zone")
     if result:
