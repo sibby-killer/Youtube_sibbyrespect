@@ -14,6 +14,7 @@ else:
 # ─────────────────────────────────────────────────────────────────────────────
 #  CHANNEL IDENTITY — CATTEACHES (2026 OVERHAUL)
 # ─────────────────────────────────────────────────────────────────────────────
+CHANNEL_NAME = "CatTeaches"
 CHANNEL_SLOGAN = "Making learning interesting with... Cats! (Cat emoji)"
 CHANNEL_URL = "https://www.youtube.com/@catteaches" # Placeholder
 HANDLE = "@catteaches"
