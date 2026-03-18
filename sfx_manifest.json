@@ -1,5 +1,1132 @@
 {
-  "roblox_oof": "sfx/roblox_oof.mp3",
-  "horror_sting": "sfx/horror_sting.mp3",
-  "scream_sfx": "sfx/scream_sfx.mp3"
+  "009": {
+    "path": "sfx/009.mp3",
+    "duration_ms": 1974,
+    "size_bytes": 49005
+  },
+  "005": {
+    "path": "sfx/005.mp3",
+    "duration_ms": 1849,
+    "size_bytes": 46125
+  },
+  "06_drum_roll": {
+    "path": "sfx/06 Drum Roll.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "cash_register_(kaching)___sound_effect_(hd)": {
+    "path": "sfx/Cash Register (Kaching) - Sound Effect (HD).mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "17_disconnected": {
+    "path": "sfx/17 Disconnected.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "heavy_object_hit_and_body_thud_sound_effect": {
+    "path": "SFX Sound Effects/Heavy object Hit and body thud sound effect.mp3",
+    "duration_ms": 2879,
+    "size_bytes": 47366
+  },
+  "swipes": {
+    "path": "sfx/swipes.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "clean_fast_swooshaiff_14784": {
+    "path": "SFX Sound Effects/clean-fast-swooshaiff-14784.mp3",
+    "duration_ms": 984,
+    "size_bytes": 19680
+  },
+  "goofy_1_,2_and_3_": {
+    "path": "sfx/Goofy 1 ,2 and 3 .mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "14_incoming_crash": {
+    "path": "sfx/14 Incoming Crash.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_cartoon_strong_fart_3050": {
+    "path": "sfx/mixkit-cartoon-strong-fart-3050.mp3",
+    "duration_ms": 1385,
+    "size_bytes": 35152
+  },
+  "rm_click_(3)": {
+    "path": "sfx/rm click (3).mp3",
+    "duration_ms": 564,
+    "size_bytes": 15021
+  },
+  "02_dial_up": {
+    "path": "sfx/02 Dial-up.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "08_rewinding": {
+    "path": "sfx/08 Rewinding.mp3",
+    "duration_ms": 2333,
+    "size_bytes": 57645
+  },
+  "whoosh_fire_transition": {
+    "path": "sfx/WHOOSH FIRE TRANSITION.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "cash_ting": {
+    "path": "SFX Sound Effects/cash ting.mp3",
+    "duration_ms": 1392,
+    "size_bytes": 33131
+  },
+  "mouse_click_sound_effect": {
+    "path": "sfx/Mouse Click Sound Effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "paper_ripping": {
+    "path": "SFX Sound Effects/Paper Ripping.mp3",
+    "duration_ms": 672,
+    "size_bytes": 29398
+  },
+  "sound_6": {
+    "path": "SFX Sound Effects/SOUND 6.mp3",
+    "duration_ms": 1368,
+    "size_bytes": 38225
+  },
+  "sound_effect_glitch": {
+    "path": "SFX Sound Effects/Sound Effect Glitch.mp3",
+    "duration_ms": 1933,
+    "size_bytes": 61402
+  },
+  "spooky_wind": {
+    "path": "sfx/Spooky Wind.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_purple_js_453": {
+    "path": "sfx/mixkit-purple-js-453.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "02_evolve_brassy_drop.2": {
+    "path": "sfx/02 Evolve_Brassy Drop.2.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mario_coin_sound___sound_effect_(hd)": {
+    "path": "SFX Sound Effects/Mario Coin Sound - Sound Effect (HD).mp3",
+    "duration_ms": 1776,
+    "size_bytes": 71191
+  },
+  "scifi_sound_effects": {
+    "path": "sfx/SciFi Sound Effects.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_electricity_static_power_up_2600": {
+    "path": "sfx/mixkit-electricity-static-power-up-2600.mp3",
+    "duration_ms": 2812,
+    "size_bytes": 69007
+  },
+  "crowd_shocked": {
+    "path": "SFX Sound Effects/crowd shocked.mp3",
+    "duration_ms": 1488,
+    "size_bytes": 34835
+  },
+  "display_digits_3": {
+    "path": "sfx/Display Digits 3.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "drop_disto_sub_1": {
+    "path": "sfx/Drop Disto Sub 1.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "pop_bubble_sound_effect": {
+    "path": "SFX Sound Effects/Pop Bubble Sound Effect.mp3",
+    "duration_ms": 1045,
+    "size_bytes": 17691
+  },
+  "boom_geomorphism_cinematic_trailer_sound_effects_123876": {
+    "path": "sfx/boom-geomorphism-cinematic-trailer-sound-effects-123876.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "message_sound": {
+    "path": "SFX Sound Effects/Message sound.mp3",
+    "duration_ms": 1071,
+    "size_bytes": 32145
+  },
+  "mixkit_bone_breaking_with_echo_2937": {
+    "path": "sfx/mixkit-bone-breaking-with-echo-2937.mp3",
+    "duration_ms": 1130,
+    "size_bytes": 28883
+  },
+  "15_fast_forward": {
+    "path": "sfx/15 Fast Forward.mp3",
+    "duration_ms": 2216,
+    "size_bytes": 54765
+  },
+  "11_low_quick": {
+    "path": "sfx/11 Low Quick.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "01_beating": {
+    "path": "sfx/01 Beating.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "bloop_cartoon_sound_effect_(mp3_160k)_(1)": {
+    "path": "SFX Sound Effects/Bloop Cartoon Sound Effect (MP3_160K) (1).mp3",
+    "duration_ms": 2989,
+    "size_bytes": 81390
+  },
+  "quick_win": {
+    "path": "SFX Sound Effects/quick-win.mp3",
+    "duration_ms": 1950,
+    "size_bytes": 345398
+  },
+  "good_idea": {
+    "path": "sfx/good-idea.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "build_up": {
+    "path": "SFX Sound Effects/BUILD-UP.mp3",
+    "duration_ms": 1909,
+    "size_bytes": 71450
+  },
+  "sound_1": {
+    "path": "SFX Sound Effects/SOUND 1.mp3",
+    "duration_ms": 2064,
+    "size_bytes": 38947
+  },
+  "fast_whoosh_sound_effect": {
+    "path": "SFX Sound Effects/Fast Whoosh Sound Effect.mp3",
+    "duration_ms": 1881,
+    "size_bytes": 31066
+  },
+  "004": {
+    "path": "sfx/004.mp3",
+    "duration_ms": 1870,
+    "size_bytes": 46125
+  },
+  "rm_click_(1)": {
+    "path": "sfx/rm click (1).mp3",
+    "duration_ms": 473,
+    "size_bytes": 12717
+  },
+  "swoosh": {
+    "path": "SFX Sound Effects/Swoosh.mp3",
+    "duration_ms": 1461,
+    "size_bytes": 60731
+  },
+  "animal_crossing_menu": {
+    "path": "sfx/Animal Crossing Menu.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "smooth_pencil_sfx": {
+    "path": "SFX Sound Effects/smooth_pencil_sfx.MP3",
+    "duration_ms": 522,
+    "size_bytes": 8409
+  },
+  "mountain_audio___new_idea_notification": {
+    "path": "sfx/Mountain Audio - New Idea Notification.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_person_blows_2660": {
+    "path": "sfx/mixkit-person-blows-2660.mp3",
+    "duration_ms": 420,
+    "size_bytes": 11955
+  },
+  "iphone_receive": {
+    "path": "sfx/Iphone Receive.mp3",
+    "duration_ms": 789,
+    "size_bytes": 20205
+  },
+  "display_digits_4": {
+    "path": "sfx/Display Digits 4.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "sudden_suspense_sound_effect": {
+    "path": "SFX Sound Effects/Sudden suspense Sound effect.mp3",
+    "duration_ms": 1981,
+    "size_bytes": 58792
+  },
+  "07_line_break": {
+    "path": "sfx/07 Line Break.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_space_impact_774": {
+    "path": "sfx/mixkit-space-impact-774.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "digital_counting": {
+    "path": "sfx/Digital counting.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "008": {
+    "path": "sfx/008.mp3",
+    "duration_ms": 1373,
+    "size_bytes": 34605
+  },
+  "pop_sound_effect": {
+    "path": "SFX Sound Effects/Pop sound effect.mp3",
+    "duration_ms": 2005,
+    "size_bytes": 97978
+  },
+  "mixkit_21_445": {
+    "path": "sfx/mixkit-21-445.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "13_metal_slam": {
+    "path": "sfx/13 Metal Slam.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_eyes_in_the_puddle_257": {
+    "path": "sfx/mixkit-eyes-in-the-puddle-257.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "001": {
+    "path": "sfx/001.mp3",
+    "duration_ms": 1002,
+    "size_bytes": 25389
+  },
+  "punch": {
+    "path": "SFX Sound Effects/punch.mp3",
+    "duration_ms": 816,
+    "size_bytes": 24064
+  },
+  "mouse_click_153941": {
+    "path": "SFX Sound Effects/mouse-click-153941.mp3",
+    "duration_ms": 1032,
+    "size_bytes": 33024
+  },
+  "02_deep": {
+    "path": "sfx/02 Deep.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mouse_click_2": {
+    "path": "SFX Sound Effects/Mouse click 2.mp3",
+    "duration_ms": 465,
+    "size_bytes": 123116
+  },
+  "apple_notification": {
+    "path": "sfx/Apple Notification.mp3",
+    "duration_ms": 1904,
+    "size_bytes": 47064
+  },
+  "sound_2": {
+    "path": "SFX Sound Effects/SOUND 2.mp3",
+    "duration_ms": 2064,
+    "size_bytes": 38947
+  },
+  "es_jump_swish___sfx_producer": {
+    "path": "SFX Sound Effects/ES_Jump Swish - SFX Producer.mp3",
+    "duration_ms": 1163,
+    "size_bytes": 50117
+  },
+  "swish_swoosh_cutscene_sound_effect": {
+    "path": "sfx/Swish Swoosh Cutscene Sound Effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "keyboard_typing_5997": {
+    "path": "sfx/keyboard-typing-5997.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 61485
+  },
+  "cartoon_fart": {
+    "path": "sfx/CARTOON FART.mp3",
+    "duration_ms": 1118,
+    "size_bytes": 28256
+  },
+  "microsoft_windows_xp_error___sound_effect_(hd)_0lhhruuw2n8_128k_1655433026313": {
+    "path": "sfx/Microsoft Windows XP Error - Sound Effect (HD)-0lhhrUuw2N8-128k-1655433026313.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "14_disc_read": {
+    "path": "sfx/14 Disc Read.mp3",
+    "duration_ms": 2385,
+    "size_bytes": 58797
+  },
+  "es_riser_suction_5___sfx_producer": {
+    "path": "SFX Sound Effects/ES_Riser Suction 5 - SFX Producer.mp3",
+    "duration_ms": 2901,
+    "size_bytes": 119371
+  },
+  "mixkit_gun_click_1123": {
+    "path": "sfx/mixkit-gun-click-1123.mp3",
+    "duration_ms": 867,
+    "size_bytes": 22613
+  },
+  "03_evolve_boom_brass_d": {
+    "path": "sfx/03 Evolve_Boom Brass D.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "010": {
+    "path": "sfx/010.mp3",
+    "duration_ms": 1672,
+    "size_bytes": 41517
+  },
+  "display_digits_1": {
+    "path": "sfx/Display Digits 1.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_bike_wheel_spinning_1613": {
+    "path": "sfx/mixkit-bike-wheel-spinning-1613.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "clock_tick": {
+    "path": "sfx/Clock Tick.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "bottle_cork": {
+    "path": "SFX Sound Effects/bottle cork.mp3",
+    "duration_ms": 949,
+    "size_bytes": 30610
+  },
+  "04_grand_hit_b.wav": {
+    "path": "sfx/04 Grand Hit B.wav.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "sci_fi_ui_sounds": {
+    "path": "sfx/Sci Fi UI Sounds.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "01_boom": {
+    "path": "sfx/01 Boom.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "paper_sound_effects": {
+    "path": "sfx/Paper Sound Effects.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "rm_whoosh": {
+    "path": "sfx/rm whoosh.mp3",
+    "duration_ms": 1951,
+    "size_bytes": 48429
+  },
+  "camera_shutter_sound_effect": {
+    "path": "sfx/camera-shutter-sound-effect.mp3",
+    "duration_ms": 859,
+    "size_bytes": 21986
+  },
+  "08_subsonic_b.wav": {
+    "path": "sfx/08 Subsonic B.wav.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "whoosh_2": {
+    "path": "SFX Sound Effects/Whoosh 2.mp3",
+    "duration_ms": 888,
+    "size_bytes": 25412
+  },
+  "_camera_shutter": {
+    "path": "sfx/-camera-shutter.mp3",
+    "duration_ms": 627,
+    "size_bytes": 16971
+  },
+  "006": {
+    "path": "sfx/006.mp3",
+    "duration_ms": 2568,
+    "size_bytes": 62829
+  },
+  "hmmm": {
+    "path": "SFX Sound Effects/hmmm.mp3",
+    "duration_ms": 768,
+    "size_bytes": 23118
+  },
+  "paper_flip_sound_effect": {
+    "path": "SFX Sound Effects/Paper Flip Sound Effect.mp3",
+    "duration_ms": 1649,
+    "size_bytes": 27722
+  },
+  "clock_ticking_sound_effect(mp3_160k)": {
+    "path": "sfx/Clock Ticking Sound Effect(MP3_160K).mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "fart": {
+    "path": "SFX Sound Effects/fart.mp3",
+    "duration_ms": 360,
+    "size_bytes": 16775
+  },
+  "09_struck_down": {
+    "path": "sfx/09 Struck Down.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "camera_13695": {
+    "path": "SFX Sound Effects/camera-13695.mp3",
+    "duration_ms": 418,
+    "size_bytes": 13374
+  },
+  "censor_beep_sound_effect": {
+    "path": "SFX Sound Effects/Censor beep sound effect.mp3",
+    "duration_ms": 627,
+    "size_bytes": 11004
+  },
+  "10_evolve_riser_robo_drums": {
+    "path": "sfx/10 Evolve_Riser Robo Drums.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "03_grand_hit_a": {
+    "path": "sfx/03 Grand Hit A.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "paper_slide_03": {
+    "path": "sfx/Paper Slide 03.mp3",
+    "duration_ms": 1071,
+    "size_bytes": 27002
+  },
+  "cartoon_splat": {
+    "path": "sfx/Cartoon Splat.mp3",
+    "duration_ms": 1012,
+    "size_bytes": 25748
+  },
+  "racks": {
+    "path": "sfx/Racks.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "13_restart_switch": {
+    "path": "sfx/13 Restart Switch.mp3",
+    "duration_ms": 1154,
+    "size_bytes": 29421
+  },
+  "mixkit_fast_tape_rewind_cinematic_transition_1092": {
+    "path": "sfx/mixkit-fast-tape-rewind-cinematic-transition-1092.mp3",
+    "duration_ms": 1917,
+    "size_bytes": 47691
+  },
+  "kids_yeyy": {
+    "path": "sfx/kids yeyy.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "clock_ticking_sound_effect": {
+    "path": "sfx/Clock Ticking Sound Effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "game_menu_select_sound_effect": {
+    "path": "SFX Sound Effects/Game Menu Select Sound Effect.mp3",
+    "duration_ms": 1730,
+    "size_bytes": 9500
+  },
+  "07_subsonic_a": {
+    "path": "sfx/07 Subsonic A.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "12_intermodulation": {
+    "path": "sfx/12 Intermodulation.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "woosh_building_109596": {
+    "path": "SFX Sound Effects/woosh-building-109596.mp3",
+    "duration_ms": 2586,
+    "size_bytes": 82755
+  },
+  "19_download": {
+    "path": "sfx/19 Download.mp3",
+    "duration_ms": 2308,
+    "size_bytes": 57069
+  },
+  "short_whoosh": {
+    "path": "sfx/Short Whoosh.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_zay_zay_309": {
+    "path": "sfx/mixkit-zay-zay-309.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_cinematic_glass_hit_suspense_677": {
+    "path": "sfx/mixkit-cinematic-glass-hit-suspense-677.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "minecraft_hurt": {
+    "path": "sfx/Minecraft Hurt.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_driving_ambition_32": {
+    "path": "sfx/mixkit-driving-ambition-32.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "11_universe_boom_a": {
+    "path": "sfx/11 Universe Boom A.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "sound_7": {
+    "path": "SFX Sound Effects/SOUND 7.mp3",
+    "duration_ms": 1080,
+    "size_bytes": 20297
+  },
+  "writing_sound_effect_1": {
+    "path": "sfx/Writing Sound Effect 1.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "002": {
+    "path": "sfx/002.mp3",
+    "duration_ms": 1596,
+    "size_bytes": 39789
+  },
+  "writing_sound_effect_2": {
+    "path": "SFX Sound Effects/WRITING Sound Effect 2.mp3",
+    "duration_ms": 2554,
+    "size_bytes": 41932
+  },
+  "06_portal_hop": {
+    "path": "sfx/06 Portal Hop.mp3",
+    "duration_ms": 2333,
+    "size_bytes": 57645
+  },
+  "hacking_sound_effect_.mp3_(most_viewed_video)": {
+    "path": "sfx/Hacking Sound Effect .MP3 (MOST VIEWED VIDEO).mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "01_processing": {
+    "path": "sfx/01 Processing.mp3",
+    "duration_ms": 1778,
+    "size_bytes": 44397
+  },
+  "mixkit_arrow_whoosh_1491": {
+    "path": "sfx/mixkit-arrow-whoosh-1491.mp3",
+    "duration_ms": 1099,
+    "size_bytes": 28256
+  },
+  "ding_sound_effect": {
+    "path": "SFX Sound Effects/Ding Sound Effect.mp3",
+    "duration_ms": 2797,
+    "size_bytes": 114465
+  },
+  "glitch_sound_effect": {
+    "path": "sfx/Glitch Sound Effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_big_cinematic_impact_788": {
+    "path": "sfx/mixkit-big-cinematic-impact-788.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "projector_spinning_1444": {
+    "path": "sfx/projector-spinning-1444.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "crumpled_paper_sound_fx": {
+    "path": "SFX Sound Effects/crumpled paper sound fx.mp3",
+    "duration_ms": 2325,
+    "size_bytes": 93133
+  },
+  "cash_register_purchase_87313": {
+    "path": "SFX Sound Effects/cash-register-purchase-87313.mp3",
+    "duration_ms": 2808,
+    "size_bytes": 56160
+  },
+  "boom_sound_effect": {
+    "path": "SFX Sound Effects/boom sound effect.mp3",
+    "duration_ms": 1309,
+    "size_bytes": 47117
+  },
+  "sound_9": {
+    "path": "SFX Sound Effects/SOUND 9.mp3",
+    "duration_ms": 1620,
+    "size_bytes": 27917
+  },
+  "mixkit_hard_pop_click_2364": {
+    "path": "sfx/mixkit-hard-pop-click-2364.mp3",
+    "duration_ms": 1175,
+    "size_bytes": 29510
+  },
+  "rm_click_(2)": {
+    "path": "sfx/rm click (2).mp3",
+    "duration_ms": 404,
+    "size_bytes": 10989
+  },
+  "shutter_click_sound_effect_(no_copyright_)": {
+    "path": "SFX Sound Effects/Shutter Click sound effect (no copyright ).mp3",
+    "duration_ms": 906,
+    "size_bytes": 15405
+  },
+  "mixkit_metal_hit_woosh_1485": {
+    "path": "sfx/mixkit-metal-hit-woosh-1485.mp3",
+    "duration_ms": 479,
+    "size_bytes": 13209
+  },
+  "wrong_answer": {
+    "path": "SFX Sound Effects/Wrong Answer.mp3",
+    "duration_ms": 1152,
+    "size_bytes": 28442
+  },
+  "sound_8": {
+    "path": "SFX Sound Effects/SOUND 8.mp3",
+    "duration_ms": 1800,
+    "size_bytes": 37193
+  },
+  "pop_1": {
+    "path": "SFX Sound Effects/Pop 1.mp3",
+    "duration_ms": 697,
+    "size_bytes": 10347
+  },
+  "mixkit_in_and_out_zoom_sound_2622": {
+    "path": "sfx/mixkit-in-and-out-zoom-sound-2622.mp3",
+    "duration_ms": 1250,
+    "size_bytes": 31391
+  },
+  "sound_4": {
+    "path": "SFX Sound Effects/SOUND 4.mp3",
+    "duration_ms": 1056,
+    "size_bytes": 47825
+  },
+  "arrow_sounds": {
+    "path": "SFX Sound Effects/arrow sounds.mp3",
+    "duration_ms": 2438,
+    "size_bytes": 42041
+  },
+  "camera_shot_flash_2": {
+    "path": "sfx/camera shot flash 2.mp3",
+    "duration_ms": 1054,
+    "size_bytes": 27002
+  },
+  "06_evolve_boom_hint_of_metal": {
+    "path": "sfx/06 Evolve_Boom Hint of Metal.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_trap_305": {
+    "path": "sfx/mixkit-trap-305.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "es_suction_pop_5___sfx_producer": {
+    "path": "SFX Sound Effects/ES_Suction Pop 5 - SFX Producer.mp3",
+    "duration_ms": 608,
+    "size_bytes": 28018
+  },
+  "ding": {
+    "path": "SFX Sound Effects/Ding.mp3",
+    "duration_ms": 549,
+    "size_bytes": 28852
+  },
+  "pop_up_sound_effect_(_256kbps_cbr_)": {
+    "path": "sfx/Pop up Sound effect ( 256kbps cbr ).mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_dog_barking_twice_1": {
+    "path": "sfx/mixkit-dog-barking-twice-1.mp3",
+    "duration_ms": 1623,
+    "size_bytes": 40795
+  },
+  "whoosh_sound_effects___no_copyright_whoosh_sound_effects": {
+    "path": "sfx/Whoosh Sound Effects _ No Copyright Whoosh Sound Effects.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "correct_sfx": {
+    "path": "SFX Sound Effects/correct sfx.mp3",
+    "duration_ms": 1440,
+    "size_bytes": 34065
+  },
+  "writing_on_keyboard_sound_effect": {
+    "path": "sfx/Writing on keyboard Sound Effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "09_data_transfer": {
+    "path": "sfx/09 Data Transfer.mp3",
+    "duration_ms": 2000,
+    "size_bytes": 49581
+  },
+  "mixkit_cartoon_toy_whistle_616": {
+    "path": "sfx/mixkit-cartoon-toy-whistle-616.mp3",
+    "duration_ms": 1212,
+    "size_bytes": 30764
+  },
+  "discord_leave": {
+    "path": "SFX Sound Effects/Discord_Leave.mp3",
+    "duration_ms": 2334,
+    "size_bytes": 38489
+  },
+  "censorship_": {
+    "path": "SFX Sound Effects/censorship .mp3",
+    "duration_ms": 1500,
+    "size_bytes": 406108
+  },
+  "party_horn": {
+    "path": "SFX Sound Effects/party horn.mp3",
+    "duration_ms": 984,
+    "size_bytes": 26561
+  },
+  "pop_9": {
+    "path": "sfx/Pop 9.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "podcast_background_music_while_talking_interview___free_music_to_use,_no_copyright___talk#1": {
+    "path": "sfx/Podcast Background Music While Talking Interview - Free Music to use, No Copyright - TALK#1.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "lens_flare_transition_sound_effect": {
+    "path": "SFX Sound Effects/Lens flare transition sound effect.mp3",
+    "duration_ms": 859,
+    "size_bytes": 14765
+  },
+  "discord_join": {
+    "path": "SFX Sound Effects/Discord_Join.mp3",
+    "duration_ms": 2914,
+    "size_bytes": 47705
+  },
+  "16_network_connect": {
+    "path": "sfx/16 Network Connect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "18_termainal_glitch": {
+    "path": "sfx/18 Termainal Glitch.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "03_rf_switcher": {
+    "path": "sfx/03 RF Switcher.mp3",
+    "duration_ms": 2333,
+    "size_bytes": 57645
+  },
+  "camera_shot_flash_4": {
+    "path": "sfx/camera shot flash 4.mp3",
+    "duration_ms": 787,
+    "size_bytes": 20733
+  },
+  "onlymp3.to___bass_drop_sound_effect_h9cwqamyxii_192k_1688370057": {
+    "path": "sfx/onlymp3.to - bass drop sound effect-H9CWQaMYXiI-192k-1688370057.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "whoosh_sound_effect": {
+    "path": "SFX Sound Effects/whoosh sound effect.mp3",
+    "duration_ms": 1022,
+    "size_bytes": 17691
+  },
+  "long_whoosh_sound_effect": {
+    "path": "sfx/Long whoosh sound effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "10_dark_drop": {
+    "path": "sfx/10 Dark Drop.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_cinematic_wind_swoosh_1471": {
+    "path": "sfx/mixkit-cinematic-wind-swoosh-1471.mp3",
+    "duration_ms": 1452,
+    "size_bytes": 36406
+  },
+  "mouse_click": {
+    "path": "SFX Sound Effects/Mouse Click.mp3",
+    "duration_ms": 336,
+    "size_bytes": 16213
+  },
+  "click": {
+    "path": "sfx/Click.mp3",
+    "duration_ms": 1938,
+    "size_bytes": 48318
+  },
+  "upset_pulses": {
+    "path": "sfx/Upset Pulses.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "mixkit_warping_slide_1531": {
+    "path": "sfx/mixkit-warping-slide-1531.mp3",
+    "duration_ms": 2000,
+    "size_bytes": 49572
+  },
+  "shot_light_energy": {
+    "path": "sfx/shot light energy.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "sound_5": {
+    "path": "SFX Sound Effects/SOUND 5.mp3",
+    "duration_ms": 1752,
+    "size_bytes": 38081
+  },
+  "display_digits_2": {
+    "path": "sfx/Display Digits 2.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "swinging_staff_whoosh_strong_08_44658": {
+    "path": "SFX Sound Effects/swinging-staff-whoosh-strong-08-44658.mp3",
+    "duration_ms": 418,
+    "size_bytes": 13374
+  },
+  "05_reboot_failure": {
+    "path": "sfx/05 Reboot Failure.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "05_evolve_boom_shot": {
+    "path": "sfx/05 Evolve_Boom Shot.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "iphone_send": {
+    "path": "sfx/Iphone Send.mp3",
+    "duration_ms": 656,
+    "size_bytes": 17325
+  },
+  "04_erased_data": {
+    "path": "sfx/04 Erased Data.mp3",
+    "duration_ms": 2000,
+    "size_bytes": 49581
+  },
+  "cash_register": {
+    "path": "sfx/Cash Register.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "rake_swing_whoosh_close": {
+    "path": "SFX Sound Effects/Rake Swing Whoosh Close.mp3",
+    "duration_ms": 2048,
+    "size_bytes": 84797
+  },
+  "003": {
+    "path": "sfx/003.mp3",
+    "duration_ms": 904,
+    "size_bytes": 23085
+  },
+  "click___sound_effect_(hd)": {
+    "path": "SFX Sound Effects/Click - Sound Effect (HD).mp3",
+    "duration_ms": 906,
+    "size_bytes": 152734
+  },
+  "futuristic_metal_keyboard_": {
+    "path": "sfx/futuristic metal keyboard .mp3",
+    "duration_ms": 951,
+    "size_bytes": 24494
+  },
+  "ui_data_loading_sound_effect": {
+    "path": "sfx/UI Data Loading Sound Effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_cinematic_transition_wind_swoosh_1468": {
+    "path": "sfx/mixkit-cinematic-transition-wind-swoosh-1468.mp3",
+    "duration_ms": 1323,
+    "size_bytes": 33271
+  },
+  "05_impact": {
+    "path": "sfx/05 Impact.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "cash_register_sounds_effects_no_copyright_free_use": {
+    "path": "SFX Sound Effects/Cash Register sounds effects No Copyright free use.mp3",
+    "duration_ms": 2322,
+    "size_bytes": 38171
+  },
+  "click_sound_by_90_creators": {
+    "path": "SFX Sound Effects/click sound by 90 Creators.mp3",
+    "duration_ms": 1555,
+    "size_bytes": 63941
+  },
+  "12_universe_boom_b": {
+    "path": "sfx/12 Universe Boom B.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "mixkit_we_own_the_night_roll_out_320": {
+    "path": "sfx/mixkit-we-own-the-night-roll-out-320.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "04_evolve_boom_feedback_e": {
+    "path": "sfx/04 Evolve_Boom Feedback E.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "clock_ticking_fast": {
+    "path": "sfx/Clock ticking fast.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "fast_whoosh_118248": {
+    "path": "SFX Sound Effects/fast-whoosh-118248.mp3",
+    "duration_ms": 1202,
+    "size_bytes": 38452
+  },
+  "11_access_granted": {
+    "path": "sfx/11 Access Granted.mp3",
+    "duration_ms": 2135,
+    "size_bytes": 52461
+  },
+  "whoosh_6316": {
+    "path": "SFX Sound Effects/whoosh-6316.mp3",
+    "duration_ms": 480,
+    "size_bytes": 9600
+  },
+  "awww": {
+    "path": "SFX Sound Effects/awww.mp3",
+    "duration_ms": 1752,
+    "size_bytes": 37803
+  },
+  "mixkit_gun_metal_click_1121": {
+    "path": "sfx/mixkit-gun-metal-click-1121.mp3",
+    "duration_ms": 963,
+    "size_bytes": 24494
+  },
+  "29_swing_a": {
+    "path": "sfx/29 Swing A.mp3",
+    "duration_ms": 1000,
+    "size_bytes": 25389
+  },
+  "10_access_denied": {
+    "path": "sfx/10 Access Denied.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "applause": {
+    "path": "sfx/Applause.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "camera_shutter_6305": {
+    "path": "SFX Sound Effects/camera-shutter-6305.mp3",
+    "duration_ms": 340,
+    "size_bytes": 10867
+  },
+  "sound_10": {
+    "path": "sfx/SOUND 10.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "fast_forward_sound_effect(mp3_160k)": {
+    "path": "SFX Sound Effects/Fast Forward Sound Effect(MP3_160K).mp3",
+    "duration_ms": 2749,
+    "size_bytes": 76913
+  },
+  "cinematic_sounds": {
+    "path": "sfx/Cinematic Sounds.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "camera_shutter_2": {
+    "path": "SFX Sound Effects/camera shutter 2.mp3",
+    "duration_ms": 627,
+    "size_bytes": 165986
+  },
+  "007": {
+    "path": "sfx/007.mp3",
+    "duration_ms": 1568,
+    "size_bytes": 39213
+  },
+  "ascending_sound_effect": {
+    "path": "sfx/Ascending sound effect.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "sound_3": {
+    "path": "SFX Sound Effects/SOUND 3.mp3",
+    "duration_ms": 1176,
+    "size_bytes": 30089
+  },
+  "shutter_click_sound_effect_no_copyright": {
+    "path": "SFX Sound Effects/Shutter Click sound effect no copyright.mp3",
+    "duration_ms": 952,
+    "size_bytes": 16437
+  },
+  "hit_1": {
+    "path": "sfx/Hit 1.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "01_evolve_brassy_swell": {
+    "path": "sfx/01 Evolve_Brassy Swell.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "wine_glass_shatter": {
+    "path": "sfx/Wine Glass Shatter.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "keyboard_press": {
+    "path": "SFX Sound Effects/keyboard press.mp3",
+    "duration_ms": 384,
+    "size_bytes": 16958
+  },
+  "pop": {
+    "path": "SFX Sound Effects/Pop.mp3",
+    "duration_ms": 1741,
+    "size_bytes": 43395
+  },
+  "typewriter": {
+    "path": "sfx/Typewriter.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73395
+  },
+  "short_transition__2_sound_": {
+    "path": "SFX Sound Effects/Short Transition _2 Sound .mp3",
+    "duration_ms": 997,
+    "size_bytes": 60532
+  },
+  "no_copyright_boxing_bell_sound_effect": {
+    "path": "sfx/NO COPYRIGHT BOXING BELL SOUND EFFECT.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "roblox_oof": {
+    "path": "sfx/roblox_oof.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "horror_sting": {
+    "path": "sfx/horror_sting.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  },
+  "scream_sfx": {
+    "path": "sfx/scream_sfx.mp3",
+    "duration_ms": 3000,
+    "size_bytes": 73197
+  }
 }
