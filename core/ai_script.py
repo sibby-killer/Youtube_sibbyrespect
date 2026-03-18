@@ -11,17 +11,15 @@ else:
 # ─────────────────────────────────────────────────────────────────────────────
 #  CHANNEL BRAND IDENTITY  (edit these to rebrand the channel)
 # ─────────────────────────────────────────────────────────────────────────────
-CHANNEL_NAME   = "SibbyRespect"
-CHANNEL_SLOGAN = "Shocking facts that change how you see the world."
-Channel_URL = "https://www.youtube.com/channel/UCOvhnm2NE7JAQoY8h06GyFQ"
-HANDLE = "@sibbyrespect"
-SUBSCRIBE_LINE = f"Subscribe to {CHANNEL_NAME} for daily mind-blowing content: {HANDLE} -> {Channel_URL}"
-# Primary US/UK-focused hashtag pool injected into every description
+CHANNEL_NAME   = "CatTeaches"
+CHANNEL_SLOGAN = "The sharpest, most cynical cat in the classroom."
+Channel_URL = "https://www.youtube.com/@CatTeaches"
+HANDLE = "@CatTeaches"
+SUBSCRIBE_LINE = f"Subscribe to {CHANNEL_NAME} for daily life hacks and satire: {HANDLE}"
 BASE_HASHTAGS = (
-    "#USA #UK #UnitedStates #UnitedKingdom #America #Britain "
-    "#Facts #MindBlast #Psychology #DidYouKnow #TikTokFacts "
+    "#CatTeaches #LifeHacks #MathTricks #Satire #SocialHacks "
+    "#Facts #LogicPuzzles #Satisfying #ASMR #HustleCulture "
     "#Viral #Shorts #YouTubeShorts #Trending #MindBlowing "
-    "#Satisfying #InterestingFacts #FunFacts #GTA #China"
 )
 
 
@@ -42,12 +40,11 @@ Your style mirrors the YouTube channel "FitFix" — fast-paced, dopamine-boostin
 
 Create a viral 45-60 second YouTube Shorts script about: {topic}
 
-=== THE FITFIX FORMULA ===
-1. HOOK (0-3s): Start with a jaw-dropping claim or question about what appears on screen.
-2. STORY (4-45s): Deliver the facts at high speed. Short sentences. Simple words. Urgent tone.
-3. DOPAMINE SPIKE (45-55s): Ask a polarising question to push viewers to the comments.
-   Example: "Would YOU do this? Tell me below."
-4. CTA (55-60s): End with "Follow {CHANNEL_NAME} for more shocking facts every day."
+=== THE CATTEACHES FORMULA ===
+1. HOOK (0-3s): Start with a sharp, bold claim about a life hack or trick.
+2. BREAKDOWN (4-45s): Explain the hack with satirical observations. Cat persona: sharp, intelligent, cynical.
+3. TWIST (45-55s): Add a 3am-style intrusive thought or cynical payoff.
+4. CTA (55-60s): End with "Don't let the brokeboys win. Follow {CHANNEL_NAME} for more."
 
 === SEO TITLE RULES ===
 - Under 70 characters total

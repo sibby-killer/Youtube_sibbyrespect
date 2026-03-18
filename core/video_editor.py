@@ -1,5 +1,5 @@
 """
-video_editor.py — SibbyRespect Vertical Engine
+video_editor.py — CatTeaches Vertical Engine
 Handles 9:16 vertical processing, zoom, visual enhancements, and styled captions.
 Alters content enough to be considered "transformed" for monetization.
 """
@@ -197,7 +197,7 @@ def assemble_simple_video(bg_video_path: str, final_audio_path: str, output_path
         )
         
         # Always add watermark via FFmpeg after initial render
-        add_watermark_ffmpeg(output_path, "SibbyRespect")
+        add_watermark_ffmpeg(output_path, "CatTeaches")
         
         audio.close()
         bg.close()

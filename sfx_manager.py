@@ -1,5 +1,5 @@
 """
-SFX Manager — SibbyRespect
+SFX Manager — CatTeaches
 Handles word-trigger based sound effect overlay on voiceover audio.
 Uses proportional text position matching for timestamp calculation.
 """

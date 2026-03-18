@@ -20,10 +20,10 @@ SUPABASE_KEY      = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 # Reddit API (for auto-topic scraping)
 REDDIT_CLIENT_ID     = os.getenv("REDDIT_CLIENT_ID", "")
 REDDIT_CLIENT_SECRET = os.getenv("REDDIT_CLIENT_SECRET", "")
-REDDIT_USER_AGENT    = "SibbyRespect/1.0"
+REDDIT_USER_AGENT    = "CatTeaches/1.0"
 
 # Flask dashboard secret
-FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "sibbyrespect-super-secret-2026")
+FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "catteaches-super-secret-2026")
 
 # Output Configuration
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")

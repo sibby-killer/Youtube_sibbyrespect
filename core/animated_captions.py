@@ -1,5 +1,5 @@
 """
-Animated Captions — SibbyRespect
+Animated Captions — CatTeaches
 Converts SRT subtitles to ASS format with dopamine-inducing animations.
 Uses FFmpeg ASS renderer — no external tools needed.
 """
@@ -58,7 +58,7 @@ def srt_to_ass(srt_path: str, ass_path: str) -> bool:
         # MarginV=0 for true vertical centering
         # FontSize=75 for large, readable text
         ass_header = """[Script Info]
-Title: SibbyRespect Captions
+Title: CatTeaches Captions
 ScriptType: v4.00+
 PlayResX: 1080
 PlayResY: 1920

@@ -1,5 +1,5 @@
 """
-Pixabay Audio Manager — SibbyRespect
+Pixabay Audio Manager — CatTeaches
 Handles sound effects library + background music from Pixabay.
 Requires PIXABAY_API_KEY in config/env.
 """
@@ -80,31 +80,21 @@ PIXABAY_API_BASE = "https://pixabay.com/api/"
 #  SFX LIBRARY — What we need to download on first run
 # ─────────────────────────────────────────────────────────────────────────────
 SFX_LIBRARY = {
-    "door_creak": {"search": "door creak horror", "category": "sound-effects"},
+    "cat_meow_sharp": {"search": "cat meow sharp sudden", "category": "sound-effects"},
+    "chalk_writing": {"search": "chalk writing blackboard", "category": "sound-effects"},
+    "bell_ring": {"search": "school bell ring", "category": "sound-effects"},
     "heartbeat": {"search": "heartbeat slow", "category": "sound-effects"},
-    "heartbeat_intense": {"search": "heartbeat fast intense", "category": "sound-effects"},
     "dramatic_bass_drop": {"search": "bass drop impact", "category": "sound-effects"},
     "angelic_choir": {"search": "angelic choir heavenly", "category": "sound-effects"},
-    "roblox_oof": {"search": "oof impact funny", "category": "sound-effects"},
-    "gta_wasted": {"search": "game over fail", "category": "sound-effects"},
-    "sad_violin": {"search": "sad violin dramatic", "category": "sound-effects"},
-    "thunder_crack": {"search": "thunder crack storm", "category": "sound-effects"},
-    "glass_shatter": {"search": "glass breaking shatter", "category": "sound-effects"},
-    "police_siren": {"search": "police siren distant", "category": "sound-effects"},
-    "cricket_silence": {"search": "cricket silence awkward", "category": "sound-effects"},
     "record_scratch": {"search": "record scratch stop", "category": "sound-effects"},
     "emotional_piano": {"search": "emotional piano note", "category": "sound-effects"},
     "windows_error": {"search": "error notification computer", "category": "sound-effects"},
-    "alarm_blaring": {"search": "alarm clock buzzing", "category": "sound-effects"},
     "anime_reveal": {"search": "dramatic reveal whoosh", "category": "sound-effects"},
-    "dial_up_internet": {"search": "dial up modem internet", "category": "sound-effects"},
     "horror_sting": {"search": "horror sting scare", "category": "sound-effects"},
-    "scream_sfx": {"search": "scream funny short", "category": "sound-effects"},
-    "drum_roll": {"search": "drum roll suspense", "category": "sound-effects"},
     "whoosh": {"search": "whoosh fast transition", "category": "sound-effects"},
-    "boing": {"search": "boing spring cartoon", "category": "sound-effects"},
-    "fart_reverb": {"search": "fart funny cartoon", "category": "sound-effects"},
     "metal_gear_alert": {"search": "alert detection stealth", "category": "sound-effects"},
+    "satisfying_click": {"search": "satisfying mechanical click", "category": "sound-effects"},
+    "page_flip": {"search": "page flip paper", "category": "sound-effects"},
 }
 
 # Background music search terms
@@ -183,7 +173,7 @@ def search_pixabay_audio(query: str, audio_type: str = "sound-effects", per_page
 
     try:
         response = requests.get(url, params=params, headers={
-            "User-Agent": "SibbyRespect Audio Bot 1.0"
+            "User-Agent": "CatTeaches Audio Bot 1.0"
         }, timeout=15)
 
         if response.status_code == 200:

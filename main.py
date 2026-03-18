@@ -62,7 +62,7 @@ def create_short(progress_callback=None) -> bool:
             progress_callback(msg)
 
     log(f"\n{'='*50}")
-    log(f"  SIBBYSRESPECT OVERHAUL PIPELINE (PHASE 3)")
+    log(f"  CATTEACHES AUTOMATION PIPELINE (CAT-STRATEGY 2026)")
     log(f"{'='*50}\n")
 
     # STEP 0: Init Tracking
@@ -121,7 +121,7 @@ def create_short(progress_callback=None) -> bool:
     bg_music = get_background_music()
 
     # STEP 9: Get Background Video
-    log("[STEP 9] Fetching Roblox background...")
+    log("[STEP 9] Fetching satisfying background clip...")
     background_path = get_background_video()
     if not background_path:
         log("[ERROR] Background video failed.")
@@ -167,7 +167,6 @@ def create_short(progress_callback=None) -> bool:
     log("[STEP 16] Uploading to YouTube with AI disclosure...")
     from core.youtube_uploader import get_authenticated_service, upload_video, add_video_to_playlist, find_or_create_playlist
     youtube_service = get_authenticated_service()
-    
     if youtube_service:
         final_desc = fix_description_formatting(content.get('description', ''))
         yt_id = upload_video(
@@ -175,7 +174,7 @@ def create_short(progress_callback=None) -> bool:
             final_video_path,
             title,
             final_desc,
-            ["SibbyRespect", "Shorts", "Relatable", "BrainRot", "Roblox"],
+            ["CatTeaches", "Shorts", "LifeHacks", "Satire", "Satisfying"],
             privacy_status="public"
         )
 

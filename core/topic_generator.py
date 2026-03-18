@@ -1,6 +1,6 @@
 """
-Topic Generator for SibbyRespect
-Primary: Scrapes Reddit (r/todayilearned, r/Damnthatsinteresting) for trending posts.
+Topic Generator for CatTeaches
+Primary: Scrapes Reddit (r/lifehacks, r/UnethicalLifeProTips) for trending posts.
 Fallback: 100-topic curated list when Reddit is unreachable.
 """
 import os
@@ -146,7 +146,7 @@ def _scrape_reddit(limit: int = 20) -> list[str]:
         reddit = praw.Reddit(
             client_id=REDDIT_CLIENT_ID,
             client_secret=REDDIT_CLIENT_SECRET,
-            user_agent=REDDIT_USER_AGENT or "SibbyRespect/1.0",
+            user_agent=REDDIT_USER_AGENT or "CatTeaches/1.0",
             read_only=True,
         )
 

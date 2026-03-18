@@ -1,6 +1,7 @@
-# SibbyRespect — Brain-Rot YouTube Automation 🧠🔥
-
-**The ultimate automated YouTube Shorts factory** for the SibbyRespect niche. This pipeline uses relatable Reddit stories, unhinged AI rants, and cinematic 4-layer audio mixing to create viral "Brain-Rot + Commentary" content.
+# CatTeaches Automation Pipeline
+Automated Short-form content generation for the **CatTeaches** YouTube & TikTok channel.
+Featuring satisfying ASMR background visuals and a cynical cat educator persona.
+This pipeline uses relatable Reddit stories, unhinged AI rants, and cinematic 4-layer audio mixing to create viral "Brain-Rot + Commentary" content.
 
 Powered by Groq AI, Edge-TTS, Pixabay SFX, and Roblox gameplay from TikTok.
 
