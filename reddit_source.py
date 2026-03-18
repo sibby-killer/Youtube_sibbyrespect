@@ -222,11 +222,11 @@ def get_reddit_story(content_type: str = None) -> dict | None:
     if content_type and content_type in SUBREDDIT_SOURCES:
         sources = SUBREDDIT_SOURCES[content_type]
     else:
-        # Random mix — weighted toward brain_rot (60%), commentary (25%), stories (15%)
+        # Random mix — weighted toward hacks (60%), math_logic (25%), unethical (15%)
         all_sources = []
-        all_sources.extend(SUBREDDIT_SOURCES["brain_rot"] * 3)  # 3x weight
-        all_sources.extend(SUBREDDIT_SOURCES["commentary"] * 2)  # 2x weight
-        all_sources.extend(SUBREDDIT_SOURCES["stories"])  # 1x weight
+        all_sources.extend(SUBREDDIT_SOURCES["hacks"] * 3)  # 3x weight
+        all_sources.extend(SUBREDDIT_SOURCES["math_logic"] * 2)  # 2x weight
+        all_sources.extend(SUBREDDIT_SOURCES["unethical"])  # 1x weight
         random.shuffle(all_sources)
         sources = all_sources[:6]  # Check up to 6 subreddits
 
